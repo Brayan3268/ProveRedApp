@@ -1,0 +1,20 @@
+{
+  "name": "proveredapp",
+  "version": "1.0.0",
+  "description": "Proyecto de software y desarrollo 2020-2",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nuxt",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "start": "nuxt start"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nuxtjs/vuetify": "^1.11.2"
+  },
+  "dependencies": {
+    "nuxt": "^2.14.6"
+  }
+}
