@@ -1,8 +1,13 @@
 <template>
-  <h1>Cliente</h1>
+  <div>
+    <h1>Cliente</h1>  
+  </div>
 </template>
 <script>
 export default {
-  layout: "blank",
+  layout: "defaultClient",
 };
 </script>
+<style >
+
+</style>

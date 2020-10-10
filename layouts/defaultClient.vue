@@ -1,10 +1,10 @@
 <template>
   <!-- Layout de barra de navegación para las páginas -->
-  <!-- Layout Default para el proveedor -->
+  <!-- Layout default para el cliente -->
   <div>
     <v-app>
-      <v-navigation-drawer v-model="drawer" app> 
-        <v-list-item >
+      <v-navigation-drawer v-model="drawer" app>
+        <v-list-item>
           <v-list-item-content>
             <v-list-item-title>Menú</v-list-item-title>
           </v-list-item-content>
@@ -12,7 +12,7 @@
 
         <v-divider></v-divider>
 
-        <v-list dense >
+        <v-list dense>
           <v-list-item
             :to="item.route"
             v-for="item in items_menu"
@@ -22,7 +22,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
 
-            <v-list-item-content >
+            <v-list-item-content>
               <v-list-item-title style="padding: 5px">{{
                 item.title
               }}</v-list-item-title>
@@ -32,11 +32,11 @@
       </v-navigation-drawer>
 
       <v-app-bar color="#0096b8" style="margin: 0px 0px 300px 255px" dense
-        ><v-app-bar-nav-icon  @click="drawer = !drawer"></v-app-bar-nav-icon
+        ><v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon
         ><v-toolbar-title >Red de proveedores</v-toolbar-title><v-spacer></v-spacer
         ><v-btn @click="logout()">Salir</v-btn></v-app-bar
       ><v-main
-        ><v-container > <nuxt /> </v-container
+        ><v-container> <nuxt /> </v-container
       ></v-main>
     </v-app>
   </div>
@@ -47,30 +47,36 @@ export default {
     return {
       drawer: null,
       items_menu: [
-        { id: "01", title: "Home", icon: "mdi-home", route: "/homeProvider" },
+        { id: "01", title: "Home", icon: "mdi-home", route: "/homeClient" },
         {
           id: "02",
           title: "Perfil",
           icon: "mdi-account-edit",
-          route: "/accountProvider",
+          route: "/accountClient",
         },
         {
           id: "03",
-          title: "Mis servicios",
-          icon: "mdi-notebook",
-          route: "/myServicesProvider",
+          title: "Busqueda",
+          icon: "mdi-magnify-plus",
+          route: "/searchProvider",
         },
         {
           id: "04",
           title: "Mis reseñas",
           icon: "mdi-account-star",
-          route: "/myReviewsProvider",
+          route: "/myReviewsClient",
         },
         {
           id: "05",
           title: "Contratos activos",
           icon: "mdi-account-switch",
-          route: "/myActiveContractsProvider",
+          route: "/myActiveContractsClient",
+        },
+        {
+          id: "06",
+          title: "Contratos en proceso",
+          icon: "mdi-book-open",
+          route: "/myProcessContracts",
         },
       ],
     };
@@ -81,6 +87,4 @@ export default {
     },
   },
 };
-/*  */
-
 </script>

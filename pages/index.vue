@@ -28,6 +28,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
               <v-btn @click="login()" color="primary">Ingresar</v-btn>
+              <v-btn @click="goToRegister()" color="primary">Registrarme</v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
@@ -51,6 +52,9 @@ export default {
       console.log(this.email, this.password);
       this.$router.push("/home");
     },
+    goToRegister() {
+      this.$router.push("/register");
+    }
   },
 };
 </script>

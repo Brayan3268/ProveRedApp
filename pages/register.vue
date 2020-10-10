@@ -1,6 +1,9 @@
 <template>
   <div>
     <v-form ref="form" v-model="valid" lazy-validation>
+
+    <!-- Se crea el form de usuario -->
+
       <v-text-field
         v-model="user.fullname"
         :counter="40"
@@ -8,13 +11,14 @@
         label="Nombre completo"
         class="mt-md-6 px-md-6"
         required
-      ></v-text-field>
+      ></v-text-field>  
 
       <v-text-field
         v-model="user.id"
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
+        input type = "number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>
@@ -57,7 +61,7 @@
       <v-checkbox
         v-model="checkbox"
         :rules="[(v) => !!v || 'You must agree to continue!']"
-        label="Do you agree?"
+        label="¿Esta de acuerdo?"
         class="px-md-6 mx-lg-auto"
         required
       ></v-checkbox>
@@ -69,18 +73,21 @@
   </div>
 </template>
 <script>
+
 export default {
   layout: "blank",
   data: () => ({
+
+    /*Reglas para los campos*/
     valid: true,
     name: "",
     nameRules: [
-      (v) => !!v || "Name is required",
+      (v) => !!v || "El campo es requerido",
       (v) => (v && v.length <= 40) || "",
     ],
     email: "",
     emailRules: [
-      (v) => !!v || "E-mail is required",
+      (v) => !!v || "E-mail es requerido",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
     ],
     select: null,
@@ -105,15 +112,20 @@ export default {
         this.users.push(this.user);
       }
 
-      if (this.user.rol == "Proveedor") {
-        this.$router.push("/formProvider");
-      } else {
-        this.$router.push("/homeClient");
-      }
+      /*Validacion para que no permita ingresar con campos vacios*/
 
+      if(this.user.fullname != null && this.user.id != null && this.user.email != null && this.user.password != null &&
+          this.user.entity != null && this.user.rol != null){
+        if (this.user.rol == "Proveedor") { 
+          this.$router.push("/formProvider");
+        } else {
+          this.$router.push("/homeClient");
+        }
+      }else{
+        alert("Llene todos los campos")
+      }
       console.log(this.users);
     },
   },
 };
 </script>
-
