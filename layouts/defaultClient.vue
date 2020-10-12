@@ -31,10 +31,10 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-app-bar color="#0096b8" style="margin: 0px 0px 300px 255px" dense
+      <v-app-bar app color="#0096b8" dense
         ><v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon
-        ><v-toolbar-title >Red de proveedores</v-toolbar-title><v-spacer></v-spacer
-        ><v-btn @click="logout()">Salir</v-btn></v-app-bar
+        ><v-toolbar-title>Red de proveedores</v-toolbar-title
+        ><v-spacer></v-spacer><v-btn @click="logout()">Salir</v-btn></v-app-bar
       ><v-main
         ><v-container> <nuxt /> </v-container
       ></v-main>

@@ -14,7 +14,7 @@
                   label="Correo"
                   prepend-icon="mdi-email-open"
                   type="email"
-                  v-model="email"
+                  v-model="id"
                 ></v-text-field>
 
                 <v-text-field
@@ -38,23 +38,42 @@
 </template>
 
 <script>
+import homeClientVue from "./homeClient.vue";
 export default {
   layout: "blank",
-  data() {
-    return {
-      email: null,
-      password: null,
-    };
+  beforeMount() {
+    this.loadUsers();
+    console.log(this.users);
   },
+  data: () => ({
+    id: null,
+    password: null,
+    users: [],
+  }),
   methods: {
+    loadUsers() {
+      let users = localStorage.getItem("users");
+      this.users = JSON.parse(users);
+    },
     login() {
-      console.log("Login");
+      let user = this.users.find((x) => x.id == this.id);
+      if (user != undefined) {
+        if (this.password == user.password) {
+          if (user.rol == "Proveedor") {
+            this.$router.push("/homeProvider");
+          } else {
+            this.$router.push("/homeClient");
+          }
+        } else {
+        }
+      } else {
+      }
+
       console.log(this.email, this.password);
-      this.$router.push("/home");
     },
     goToRegister() {
       this.$router.push("/register");
-    }
+    },
   },
 };
 </script>

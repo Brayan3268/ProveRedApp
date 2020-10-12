@@ -1,33 +1,34 @@
 <template>
-  
   <div>
-    <h2>Para continuar con el proceso de creacion de cuenta, por favor 
-      rellene los siguientes campos de acuerdo a su informacion como proveedor</h2>
+    <h2>
+      Para continuar con el proceso de creacion de cuenta, por favor rellene los
+      siguientes campos de acuerdo a su informacion como proveedor
+    </h2>
 
     <!-- Se crea el form de proveedor -->
 
     <v-form ref="form" v-model="valid" lazy-validation>
       <v-text-field
-        v-model="user.id"
+        v-model="users.length"
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
-        input type = "number"
+        disabled
         class="mt-md-6 px-md-6"
         required
       ></v-text-field>
 
       <v-text-field
-        v-model="user.nameCompany"
+        v-model="userProvider.nameCompany"
         :counter="40"
         :rules="nameRules"
         label="Nombre de la empresa"
         class="px-md-6 mx-lg-auto"
         required
-      ></v-text-field>  
+      ></v-text-field>
 
       <v-select
-        v-model="user.typeProvider"
+        v-model="userProvider.typeProvider"
         :items="typeProviderSelect"
         :rules="[(v) => !!v || 'Item is required']"
         label="Tipo de proveedor"
@@ -37,11 +38,12 @@
 
       <!-- Aqui el proveedor va a dar detalles sobre su servicio o servicios -->
       <v-textarea
-        v-model="user.serviceDescription"
+        v-model="userProvider.serviceDescription"
         :counter="300"
         :rules="serviceRules"
         class="px-md-6 mx-lg-auto"
-        label="Describa su servicio(s)">
+        label="Describa su servicio(s)"
+      >
       </v-textarea>
 
       <v-checkbox
@@ -57,15 +59,19 @@
       </v-btn>
     </v-form>
   </div>
-  
 </template>
 <script>
 export default {
   layout: "blank",
+  beforeMount() {
+    this.loadUser();
+    console.log(this.users);
+  },
+  beforeUpdate() {
+    this.loadUser();
+  },
   data: () => ({
-
     /*Reglas para los campos*/
-
     valid: true,
     name: "",
     nameRules: [
@@ -80,35 +86,49 @@ export default {
     typeProviderSelect: ["Proveedor formal", "proveedor informal"],
     checkbox: false,
     users: [],
-    user: {
+    userProviders: [],
+    userProvider: {
       /*Estos datos deberan ser almacenados en la bd junto con los nuevos datos que se adquieren en esta pagina*/
       /*fullname: null,
-      id: null,
       email: null,
       password: null,
       entity: null,
       rol: null,*/
       id: null,
       nameCompany: null,
-      typeProvider: null,      
+      typeProvider: null,
       serviceDescription: null,
     },
   }),
 
   methods: {
-    finishFormProvider() {
-      let exist = this.users.find((x) => x.id == this.user.id);
-      if (exist) {
-        this.users.push(this.user);
-      }
+    loadUser() {
+      let users = localStorage.getItem("users");
+      this.users = JSON.parse(users);
+    },
 
-      if(this.user.id != null && this.user.nameCompany != null && this.user.typeProvider != null &&
-          this.user.serviceDescription != null){
-        this.$router.push("/homeProvider");
-      }else{
-        alert("Llene todos los campos")
+    finishFormProvider() {
+      let exist = this.userProviders.find((x) => x.id == this.userProvider.id);
+      if (exist == undefined) {
+        this.userProviders.push(this.userProvider);
+        localStorage.setItem(
+          "userProviders",
+          JSON.stringify(this.userProviders)
+        );
+      } else {
+        alert("La persona que intenda crear ya existe");
       }
-      console.log(this.users);
+      console.log(this.userProviders);
+      if (
+        this.userProvider.id != null &&
+        this.userProvider.nameCompany != null &&
+        this.userProvider.typeProvider != null &&
+        this.userProvider.serviceDescription != null
+      ) {
+        this.$router.push("/homeProvider");
+      } else {
+        alert("Llene todos los campos");
+      }
     },
   },
 };

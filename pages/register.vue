@@ -1,8 +1,7 @@
 <template>
   <div>
     <v-form ref="form" v-model="valid" lazy-validation>
-
-    <!-- Se crea el form de usuario -->
+      <!-- Se crea el form de usuario -->
 
       <v-text-field
         v-model="user.fullname"
@@ -11,14 +10,15 @@
         label="Nombre completo"
         class="mt-md-6 px-md-6"
         required
-      ></v-text-field>  
+      ></v-text-field>
 
       <v-text-field
         v-model="user.id"
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
-        input type = "number"
+        input
+        type="number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>
@@ -73,11 +73,9 @@
   </div>
 </template>
 <script>
-
 export default {
   layout: "blank",
   data: () => ({
-
     /*Reglas para los campos*/
     valid: true,
     name: "",
@@ -108,21 +106,30 @@ export default {
   methods: {
     createUser() {
       let exist = this.users.find((x) => x.id == this.user.id);
-      if (exist) {
+      if (exist == undefined) {
         this.users.push(this.user);
+        localStorage.setItem("users", JSON.stringify(this.users));
+      } else {
+        alert("La persona que intenda crear ya esta en la tabla");
       }
 
       /*Validacion para que no permita ingresar con campos vacios*/
 
-      if(this.user.fullname != null && this.user.id != null && this.user.email != null && this.user.password != null &&
-          this.user.entity != null && this.user.rol != null){
-        if (this.user.rol == "Proveedor") { 
+      if (
+        this.user.fullname != null &&
+        this.user.id != null &&
+        this.user.email != null &&
+        this.user.password != null &&
+        this.user.entity != null &&
+        this.user.rol != null
+      ) {
+        if (this.user.rol == "Proveedor") {
           this.$router.push("/formProvider");
         } else {
           this.$router.push("/homeClient");
         }
-      }else{
-        alert("Llene todos los campos")
+      } else {
+        alert("Llene todos los campos");
       }
       console.log(this.users);
     },

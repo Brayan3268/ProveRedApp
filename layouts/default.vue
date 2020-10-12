@@ -3,8 +3,8 @@
   <!-- Layout Default para el proveedor -->
   <div>
     <v-app>
-      <v-navigation-drawer v-model="drawer" app> 
-        <v-list-item >
+      <v-navigation-drawer v-model="drawer" app>
+        <v-list-item>
           <v-list-item-content>
             <v-list-item-title>Menú</v-list-item-title>
           </v-list-item-content>
@@ -12,7 +12,7 @@
 
         <v-divider></v-divider>
 
-        <v-list dense >
+        <v-list dense>
           <v-list-item
             :to="item.route"
             v-for="item in items_menu"
@@ -22,7 +22,7 @@
               <v-icon>{{ item.icon }}</v-icon>
             </v-list-item-icon>
 
-            <v-list-item-content >
+            <v-list-item-content>
               <v-list-item-title style="padding: 5px">{{
                 item.title
               }}</v-list-item-title>
@@ -31,12 +31,12 @@
         </v-list>
       </v-navigation-drawer>
 
-      <v-app-bar color="#0096b8" style="margin: 0px 0px 300px 255px" dense
-        ><v-app-bar-nav-icon  @click="drawer = !drawer"></v-app-bar-nav-icon
-        ><v-toolbar-title >Red de proveedores</v-toolbar-title><v-spacer></v-spacer
-        ><v-btn @click="logout()">Salir</v-btn></v-app-bar
+      <v-app-bar app color="#0096b8" dense
+        ><v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon
+        ><v-toolbar-title>Red de proveedores</v-toolbar-title
+        ><v-spacer></v-spacer><v-btn @click="logout()">Salir</v-btn></v-app-bar
       ><v-main
-        ><v-container > <nuxt /> </v-container
+        ><v-container> <nuxt /> </v-container
       ></v-main>
     </v-app>
   </div>
@@ -82,5 +82,4 @@ export default {
   },
 };
 /*  */
-
 </script>
