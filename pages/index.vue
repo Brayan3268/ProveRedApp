@@ -43,28 +43,57 @@ export default {
   layout: "blank",
   beforeMount() {
     this.loadUsers();
+    this.loadUsersProviders();
     console.log(this.users);
   },
   data: () => ({
     id: null,
     password: null,
     users: [],
-    onlineUserProvider: {},
+    userProviders: [],
+    onlineUserProvider: {
+      fullname: null,
+      id: null,
+      email: null,
+      password: null,
+      entity: null,
+      rol: null,
+      nameCompany: null,
+      typeProvider: null,
+      serviceDescription: null,
+    },
     onlineUserClient: {},
   }),
   methods: {
     loadUsers() {
       let users = localStorage.getItem("users");
-      this.users = JSON.parse(users);
+      if (users != null) {
+        this.users = JSON.parse(users);
+      }
+    },
+    loadUsersProviders() {
+      let usersProvider = localStorage.getItem("userProviders");
+      if (usersProvider != null) {
+        this.userProviders = JSON.parse(usersProvider);
+      }
     },
     login() {
       let user = this.users.find((x) => x.id == this.id);
       if (user != undefined) {
         if (this.password == user.password) {
           if (user.rol == "Proveedor") {
+            let userProvider = this.userProviders.find((x) => x.id == this.id);
+            this.onlineUserProvider = user;
+            this.onlineUserProvider.nameCompany = userProvider.nameCompany;
+            this.onlineUserProvider.typeProvider = userProvider.typeProvider;
+            this.onlineUserProvider.serviceDescription =
+              userProvider.serviceDescription;
+            console.log(this.onlineUserProvider);
+            localStorage.setItem(
+              "onlineUserProvider",
+              JSON.stringify(this.onlineUserProvider)
+            );
             this.$router.push("/homeProvider");
-            //this.onlineUserProvider=user;
-            //localStorage.setItem("onlineUserProvider", JSON.stringify(this.onlineUserProvider));
           } else {
             this.$router.push("/homeClient");
           }
@@ -75,7 +104,7 @@ export default {
         alert("El usuario no tiene una cuenta");
       }
 
-      console.log(this.email, this.password);
+      console.log(this.id, this.password);
     },
     goToRegister() {
       this.$router.push("/register");

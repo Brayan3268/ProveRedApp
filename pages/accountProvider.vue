@@ -21,7 +21,7 @@
 
     <v-container>
       <v-text-field
-        v-model="user.fullname"
+        v-model="userOnline.fullname"
         :counter="40"
         :rules="nameRules"
         label="Nombre completo"
@@ -30,7 +30,7 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="user.email"
+        v-model="userOnline.email"
         :rules="emailRules"
         label="E-mail"
         class="px-md-6 mx-lg-auto"
@@ -38,7 +38,7 @@
       ></v-text-field>
 
       <v-text-field
-        v-model="user.password"
+        v-model="userOnline.password"
         :counter="10"
         :rules="nameRules"
         label="Contraseña"
@@ -47,7 +47,7 @@
       ></v-text-field>
 
       <v-select
-        v-model="user.typeProvider"
+        v-model="userOnline.typeProvider"
         :items="typeProviderSelect"
         :rules="[(v) => !!v || 'Item is required']"
         label="Tipo de proveedor"
@@ -56,7 +56,7 @@
       ></v-select>
 
       <v-select
-        v-model="user.entity"
+        v-model="userOnline.entity"
         :items="entity"
         :rules="[(v) => !!v || 'Item is required']"
         label="Entidad"
@@ -65,7 +65,7 @@
       ></v-select>
 
       <v-text-field
-        v-model="user.companyName"
+        v-model="userOnline.nameCompany"
         :counter="40"
         :rules="nameRules"
         label="Nombre de la Empresa"
@@ -74,7 +74,7 @@
       ></v-text-field>
 
       <v-textarea
-        v-model="user.serviceDescription"
+        v-model="userOnline.serviceDescription"
         :counter="300"
         :rules="serviceRules"
         class="px-md-6 mx-lg-auto"
@@ -88,7 +88,7 @@
 <script>
 export default {
   beforeMount() {
-    this.loadUsers();
+    this.loadInfo();
   },
   data: () => ({
     /*Reglas para los campos*/
@@ -110,24 +110,65 @@ export default {
       (v) => (v && v.length <= 300 && v.length > 50) || "",
     ],
     users: [],
-    user: {
+    usersProviders: [],
+    user: {},
+    userProvider: {},
+    userOnline: {
       fullname: null,
       id: null,
       email: null,
       password: null,
       typeProvider: null,
+      roll: null,
       entity: null,
-      companyName: null,
+      nameCompany: null,
       serviceDescription: null,
     },
   }),
   methods: {
-    loadUsers() {
+    loadInfo() {
+      let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       let users = localStorage.getItem("users");
+      let usersProvider = localStorage.getItem("userProviders");
       this.users = JSON.parse(users);
+      this.usersProviders = JSON.parse(usersProvider);
+      this.userOnline = JSON.parse(onlineUserProvider);
+    },
+    editUser() {
+      let user = this.users.find((x) => x.id == this.userOnline.id);
+      let userProvider = this.usersProviders.find(
+        (x) => x.id == this.userOnline.id
+      );
+
+      if (user != undefined && userProvider != undefined) {
+        let existIndex = this.users.findIndex(
+          (x) => x.id == this.userOnline.id
+        );
+        let existIndexP = this.usersProviders.findIndex(
+          (x) => x.id == this.userOnline.id
+        );
+        this.user = user;
+        this.user.fullname = this.userOnline.fullname;
+        this.user.email = this.userOnline.email;
+        this.user.password = this.userOnline.password;
+        this.user.typeProvider = this.userOnline.typeProvider;
+
+        this.userProvider = userProvider;
+        this.userProvider.nameCompany = this.userOnline.nameCompany;
+        this.userProvider.typeProvider = this.userOnline.typeProvider;
+        this.userProvider.serviceDescription = this.userOnline.serviceDescription;
+
+        this.usersProviders.splice(existIndexP, 1, this.userProvider);
+        this.users.splice(existIndex, 1, this.user);
+
+        localStorage.setItem("users", JSON.stringify(this.users));
+        localStorage.setItem(
+          "userProviders",
+          JSON.stringify(this.usersProviders)
+        );
+      }
     },
     sendInfo() {},
-    editUser(user) {},
   },
 };
 </script>
