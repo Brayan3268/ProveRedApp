@@ -35,7 +35,8 @@
         ><v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon
         ><v-toolbar-title>Red de proveedores</v-toolbar-title
         ><v-spacer></v-spacer><v-btn @click="logout()">Salir</v-btn></v-app-bar
-      ><v-main
+      >
+      <v-main
         ><v-container> <nuxt /> </v-container
       ></v-main>
     </v-app>

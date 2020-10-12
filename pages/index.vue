@@ -49,6 +49,8 @@ export default {
     id: null,
     password: null,
     users: [],
+    onlineUserProvider: {},
+    onlineUserClient: {},
   }),
   methods: {
     loadUsers() {
@@ -61,12 +63,16 @@ export default {
         if (this.password == user.password) {
           if (user.rol == "Proveedor") {
             this.$router.push("/homeProvider");
+            //this.onlineUserProvider=user;
+            //localStorage.setItem("onlineUserProvider", JSON.stringify(this.onlineUserProvider));
           } else {
             this.$router.push("/homeClient");
           }
         } else {
+          alert("La contraseña no es correcta");
         }
       } else {
+        alert("El usuario no tiene una cuenta");
       }
 
       console.log(this.email, this.password);
@@ -74,6 +80,7 @@ export default {
     goToRegister() {
       this.$router.push("/register");
     },
+    getOnlineUser(user) {},
   },
 };
 </script>

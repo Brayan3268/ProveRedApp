@@ -65,7 +65,7 @@
       ></v-select>
 
       <v-text-field
-        v-model="user.fullname"
+        v-model="user.companyName"
         :counter="40"
         :rules="nameRules"
         label="Nombre de la Empresa"
@@ -115,23 +115,19 @@ export default {
       id: null,
       email: null,
       password: null,
+      typeProvider: null,
       entity: null,
-      rol: null,
+      companyName: null,
+      serviceDescription: null,
     },
-
   }),
   methods: {
     loadUsers() {
       let users = localStorage.getItem("users");
       this.users = JSON.parse(users);
     },
-    sendInfo() {
-      
-    },
-    editUser() {
-
-      
-    },
+    sendInfo() {},
+    editUser(user) {},
   },
 };
 </script>

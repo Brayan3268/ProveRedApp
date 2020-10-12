@@ -7,9 +7,9 @@
 
     <!-- Se crea el form de proveedor -->
 
-    <v-form ref="form" v-model="valid" lazy-validation>
+    <v-form ref="formProvider" v-model="formProvider" lazy-validation>
       <v-text-field
-        v-model="users.length"
+        v-model="userProvider.id"
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
@@ -58,17 +58,32 @@
         Continuar
       </v-btn>
     </v-form>
+
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline"> Error </v-card-title>
+
+        <v-card-text> Llene todos los campos </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 <script>
 export default {
   layout: "blank",
   beforeMount() {
-    this.loadUser();
+    this.loadUsers();
+    this.loadUser(this.users[this.users.length - 1]);
     console.log(this.users);
   },
   beforeUpdate() {
-    this.loadUser();
+    this.loadUsers();
   },
   data: () => ({
     /*Reglas para los campos*/
@@ -85,6 +100,8 @@ export default {
     select: null,
     typeProviderSelect: ["Proveedor formal", "proveedor informal"],
     checkbox: false,
+    formProvider: null,
+    dialog: false,
     users: [],
     userProviders: [],
     userProvider: {
@@ -102,32 +119,35 @@ export default {
   }),
 
   methods: {
-    loadUser() {
+    loadUsers() {
       let users = localStorage.getItem("users");
-      this.users = JSON.parse(users);
+      if (users != null) {
+        this.users = JSON.parse(users);
+      }
+      console.log(this.users);
     },
 
+    loadUser(user) {
+      this.userProvider.id = user.id;
+    },
     finishFormProvider() {
-      let exist = this.userProviders.find((x) => x.id == this.userProvider.id);
-      if (exist == undefined) {
-        this.userProviders.push(this.userProvider);
-        localStorage.setItem(
-          "userProviders",
-          JSON.stringify(this.userProviders)
+      // this.userProvider.id = this.users[this.users.length - 1];
+      if (this.$refs.formProvider.validate() && this.formProvider) {
+        let exist = this.userProviders.find(
+          (x) => x.id == this.userProvider.id
         );
+        if (exist == undefined) {
+          this.userProviders.push(this.userProvider);
+          localStorage.setItem(
+            "userProviders",
+            JSON.stringify(this.userProviders)
+          );
+          this.$router.push("/homeProvider");
+        } else {
+          alert("La persona que intenda crear ya existe");
+        }
       } else {
-        alert("La persona que intenda crear ya existe");
-      }
-      console.log(this.userProviders);
-      if (
-        this.userProvider.id != null &&
-        this.userProvider.nameCompany != null &&
-        this.userProvider.typeProvider != null &&
-        this.userProvider.serviceDescription != null
-      ) {
-        this.$router.push("/homeProvider");
-      } else {
-        alert("Llene todos los campos");
+        this.dialog = true;
       }
     },
   },
