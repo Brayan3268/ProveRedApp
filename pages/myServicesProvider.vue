@@ -4,7 +4,7 @@
 
     <v-data-table
       :headers="headers"
-      :items="services"
+      :items="servicesOnlineUserProviders"
       :items-per-page="10"
       class="elevation-1"
     ></v-data-table>
@@ -29,6 +29,15 @@ export default {
         { text: "Actions" },
       ],
 
+      servicesOnlineUserProviders:[],
+      servicesOnlineUserProvider:{
+        id: null,
+        initDate: null,
+        finDate: null,
+        description: null,
+        total: null,
+      },
+
       services:[],
       service:{
         id: null,
@@ -37,6 +46,9 @@ export default {
         description: null,
         total: null,
       },
+
+      onlineUserProvider:{},
+
     };
   },
   methods: {
@@ -44,6 +56,17 @@ export default {
       let services = localStorage.getItem("services");
       this.services = JSON.parse(services);
       console.log(services);
+
+      let onlineUserProvider = localStorage.getItem("onlineUserProvider");
+      this.onlineUserProvider = JSON.parse(onlineUserProvider);
+      console.log(onlineUserProvider);
+      debugger
+      //let services2 = new Array;
+      for(var i = 0; i < this.services.length; i++){
+          if(this.services[i].id == this.onlineUserProvider.id)
+          this.servicesOnlineUserProviders.push(this.services[i]);
+      }
+      console.log(this.servicesOnlineUserProviders);
     },
   },
 };
