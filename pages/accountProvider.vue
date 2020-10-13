@@ -281,7 +281,6 @@ export default {
     },
     deleteAccountProvider1() {
       debugger
-      let isDo = false;
       let id = this.reasonForDeleteAccount.id;
       let userProvSave = null;
       let userSave = null;
@@ -291,7 +290,7 @@ export default {
 
         let users2 = localStorage.getItem("users");
         users2 = JSON.parse(users2);
-                        userSave = users2;
+        userSave = users2;
         console.log(users2);
         let posUser = users2.findIndex(x=>x.id == id);
         console.log(posUser);
@@ -302,7 +301,7 @@ export default {
 
         let userProvider2 = localStorage.getItem("userProviders");
         userProvider2 = JSON.parse(userProvider2);
-                        userProvSave = userProvider2;
+        userProvSave = userProvider2;
         console.log(userProvider2);
         let posUserProvider = userProvider2.findIndex(x => x.id == id);
         console.log(posUserProvider);
@@ -310,8 +309,12 @@ export default {
         console.log(userProviderDelete);
         localStorage.setItem("userProviders", JSON.stringify(userProvider2));
 
-        (userSave.length > users2 && userProvSave.length > userProvider2) ? this.dialog = true : this.dialog2 = true;
-
+        if(userSave.length > users2 && userProvSave.length > userProvider2) {
+          this.dialog = true;
+          this.$router.push("/");
+        } else {
+          this.dialog2 = true;
+        }
         /*Esta validacion de posUser == userProvider2 solo sirve en el local storage, no en ningun otro lado */
 
         let posUser2 = users2.findIndex(x=>x.id == id);
