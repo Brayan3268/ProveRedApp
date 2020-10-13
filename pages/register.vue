@@ -35,6 +35,7 @@
         :counter="10"
         :rules="nameRules"
         label="Contraseña"
+        type="password"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>

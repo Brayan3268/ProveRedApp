@@ -95,7 +95,7 @@ export default {
     ],
     serviceRules: [
       (v) => !!v || "El campo es requerido",
-      (v) => (v && v.length <= 300 && v.length > 50) || "",
+      (v) => (v && v.length <= 300 && v.length > 20) || "",
     ],
     select: null,
     typeProviderSelect: ["Proveedor formal", "proveedor informal"],
@@ -125,6 +125,11 @@ export default {
         this.users = JSON.parse(users);
       }
       console.log(this.users);
+
+      let userProviders = localStorage.getItem("userProviders");
+      if (userProviders != null) {
+        this.userProviders = JSON.parse(userProviders);
+      }
     },
 
     loadUser(user) {

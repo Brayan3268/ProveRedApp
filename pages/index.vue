@@ -11,9 +11,9 @@
             <v-card-text>
               <v-form>
                 <v-text-field
-                  label="Correo"
-                  prepend-icon="mdi-email-open"
-                  type="email"
+                  label="Cedula"
+                  prepend-icon=""
+                  type="number"
                   v-model="id"
                 ></v-text-field>
 

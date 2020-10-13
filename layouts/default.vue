@@ -73,6 +73,12 @@ export default {
           icon: "mdi-account-switch",
           route: "/myActiveContractsProvider",
         },
+        {
+          id: "06",
+          title: "Nuevo servicio",
+          icon: "",
+          route: "/myServiceNewsAndActives",
+        },
       ],
     };
   },
