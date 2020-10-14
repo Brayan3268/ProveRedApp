@@ -43,6 +43,9 @@ export default {
     this.loadInfo();
     console.log(this.services);
   },
+  beforeUpdate() {
+    //window.location.reload();
+  },
   data: () => ({
     formService: null,
     dates: [],
@@ -57,6 +60,7 @@ export default {
     onlineUserProvider: {},
     service: {
       id: null,
+      idService: null,
       initDate: null,
       finDate: null,
       description: null,
@@ -80,6 +84,17 @@ export default {
       if (services != null) {
         this.services = JSON.parse(services);
       }
+
+      let j = 1;
+
+      if (this.services != null) {
+        for (var i = 0; i < this.services.length; i++) {
+          this.services[i].idService = j + "";
+          j++;
+        }
+      }
+      localStorage.setItem("services", JSON.stringify(this.services));
+      console.log(this.service);
     },
 
     createService() {
@@ -93,7 +108,7 @@ export default {
 
         console.log(this.services);
         localStorage.setItem("services", JSON.stringify(this.services));
-        window.location.reload(); //verificar
+        this.service = {};
       }
     },
   },
