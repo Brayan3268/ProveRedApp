@@ -1,9 +1,11 @@
 <template>
+<!--permite visualizar los campos relacionados con el perfil del proveedor, subir o adjuntar multimedia relacionada, y asi mismo poder actualizarlo-->
   <div>
     <v-container>
       <h1>Cuenta del proveedor</h1>
 
       <p>Subir documentos sobre mis servicios</p>
+      <!--Permite adjuntar archivos multimedia relacionados con el perfil del proveedor-->
       <v-file-input
         truncate-length="15"
         label="Subir multimedia"
@@ -19,6 +21,7 @@
       <v-btn @click="sendInfo">Subir informacion</v-btn>
     </v-container>
 
+    <!--visualiza los datos pertenecientes a los campos del proveedor, con la posibilidad de editarlos-->
     <v-container>
       <v-text-field
         v-model="userOnline.fullname"
@@ -84,6 +87,7 @@
       <v-btn @click="editUser">Editar</v-btn>
     </v-container>
 
+    <!--permite eliminar la cuenta de acceso creada, dejando como huella una razón de dicha acción a modo de retroalimentación-->
     <v-container>
       <h1>!ELIMINAR MI CUENTA¡</h1>
 
@@ -112,6 +116,7 @@
       >Eliminar cuenta</v-btn>
     </v-container>
 
+    <!-- crea dialogos que dan cuenta de la correcta realización de la eliminación de una cuenta-->
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline"> Eliminacion de cuenta </v-card-title>
@@ -143,7 +148,8 @@
   </div>
 </template>
 <script>
-import usersVue from '../../elTaller/el-taller-nuxt/pages/users.vue';
+
+//verifica que los metodos estén correctos antes de cargar, subir o actualizar la información
 export default {
   beforeMount() {
     this.loadInfo();
@@ -225,6 +231,7 @@ export default {
 
   }),
   methods: {
+    //carga los usuarios almacenados localmente y convierte sus datos a JSON
     loadUsers() {
       let users2 = localStorage.getItem("users");
       this.users2 = JSON.parse(users2);
@@ -237,6 +244,7 @@ export default {
         this.reasonsForDeleteAccounts = JSON.parse(reasonsForDeleteAccounts);
       }
     },
+    ///////////////////////////////////////////////////////////////////////////////////////
     loadInfo() {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       let users = localStorage.getItem("users");
@@ -245,6 +253,7 @@ export default {
       this.usersProviders = JSON.parse(usersProvider);
       this.userOnline = JSON.parse(onlineUserProvider);
     },
+    // permite editar la información del usuario validando en primera instancia si existe o no
     editUser() {
       let user = this.users.find((x) => x.id == this.userOnline.id);
       let userProvider = this.usersProviders.find(
@@ -279,6 +288,7 @@ export default {
         );
       }
     },
+    // elimina la cuenta del proveedor, guardando su razón para eliminar la cuenta
     deleteAccountProvider1() {
       debugger
       let isDo = false;
