@@ -1,7 +1,6 @@
 <template>
   <div>
     <h1>Mis servicios activos</h1>  
-
       <v-text-field
         v-model="servicesOnlineUserProvider.id"
         label="Cedula"
@@ -81,6 +80,7 @@ export default {
       
       headers: [
         { text: "Cedula", value: "id" },
+        { text: "ID del servicio", value: "idService" },
         { text: "Fecha de inicio", value: "initDate" },
         { text: "Fecha de finalizacion", value: "finDate" },
         { text: "Descripcion", value: "description" },
@@ -131,11 +131,13 @@ export default {
 
       if(services != null){
         for(var i = 0; i < this.services.length; i++){
-          if(this.services[i].id == this.onlineUserProvider.id)
-          this.servicesOnlineUserProviders.push(this.services[i]);
-          this.servicesOnlineUserProviders[i].idService = j;
+          if(this.services[i].id == this.onlineUserProvider.id){
+            this.servicesOnlineUserProviders.push(this.services[i]);
+            this.servicesOnlineUserProviders[i].idService = j + "";
           j++;
+          }
         }
+        localStorage.setItem("services", JSON.stringify(this.servicesOnlineUserProviders));
       }
       console.log(this.servicesOnlineUserProviders);
     },
@@ -163,7 +165,7 @@ export default {
       this.editing = false;
     },
     deleteService(service){
-      debugger
+      
       let services = localStorage.getItem("services");
       this.services = JSON.parse(services);
 
@@ -173,6 +175,7 @@ export default {
         localStorage.setItem("services", JSON.stringify(this.services));
       }
       console.log(this.services);
+      window.location.reload();
     },
   },
 };
