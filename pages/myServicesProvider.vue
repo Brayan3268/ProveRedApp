@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Mis servicios activos</h1>  
+    <h1>Mis servicios activos</h1>
 
     <v-data-table
       :headers="headers"
@@ -8,7 +8,6 @@
       :items-per-page="10"
       class="elevation-1"
     ></v-data-table>
-
   </div>
 </template>
 
@@ -19,7 +18,6 @@ export default {
   },
   data() {
     return {
-      
       headers: [
         { text: "Cedula", value: "id" },
         { text: "Fecha de inicio", value: "initDate" },
@@ -29,8 +27,8 @@ export default {
         { text: "Actions" },
       ],
 
-      servicesOnlineUserProviders:[],
-      servicesOnlineUserProvider:{
+      servicesOnlineUserProviders: [],
+      servicesOnlineUserProvider: {
         id: null,
         initDate: null,
         finDate: null,
@@ -38,8 +36,8 @@ export default {
         total: null,
       },
 
-      services:[],
-      service:{
+      services: [],
+      service: {
         id: null,
         initDate: null,
         finDate: null,
@@ -47,8 +45,7 @@ export default {
         total: null,
       },
 
-      onlineUserProvider:{},
-
+      onlineUserProvider: {},
     };
   },
   methods: {
@@ -60,10 +57,10 @@ export default {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       this.onlineUserProvider = JSON.parse(onlineUserProvider);
       console.log(onlineUserProvider);
-      debugger
+
       //let services2 = new Array;
-      for(var i = 0; i < this.services.length; i++){
-          if(this.services[i].id == this.onlineUserProvider.id)
+      for (var i = 0; i < this.services.length; i++) {
+        if (this.services[i].id == this.onlineUserProvider.id)
           this.servicesOnlineUserProviders.push(this.services[i]);
       }
       console.log(this.servicesOnlineUserProviders);

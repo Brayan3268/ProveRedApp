@@ -48,7 +48,7 @@ export default {
     dates: [],
     serviceRules: [
       (v) => !!v || "El campo es requerido",
-      (v) => (v && v.length <= 300 && v.length > 30) || "",
+      (v) => (v && v.length <= 300 && v.length > 1) || "",
     ],
     nameRules: [
       (v) => !!v || "El campo es requerido",
@@ -77,18 +77,23 @@ export default {
       }
 
       let services = localStorage.getItem("services");
-      if(services != null){
+      if (services != null) {
         this.services = JSON.parse(services);
       }
     },
+
     createService() {
       if (this.$refs.formService.validate() && this.formService) {
         this.service.id = this.onlineUserProvider.id;
+
         this.service.initDate = this.dates[0];
         this.service.finDate = this.dates[this.dates.length - 1];
+
         this.services.push(this.service);
-        //console.log(this.services);
+
+        console.log(this.services);
         localStorage.setItem("services", JSON.stringify(this.services));
+        window.location.reload(); //verificar
       }
     },
   },
