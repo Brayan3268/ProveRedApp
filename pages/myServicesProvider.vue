@@ -102,6 +102,7 @@ export default {
       services: [],
       service: {
         id: null,
+        idService: null,
         initDate: null,
         finDate: null,
         description: null,
@@ -116,34 +117,20 @@ export default {
   methods: {
     loadPage() {
       let services = localStorage.getItem("services");
-      this.services = JSON.parse(services);
-      console.log(services);
+
       if (services != null) {
-        this.services = services;
+        this.services = JSON.parse(services);
       }
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
-      this.onlineUserProvider = JSON.parse(onlineUserProvider);
-      console.log(onlineUserProvider);
+      if (onlineUserProvider != null) {
+        this.onlineUserProvider = JSON.parse(onlineUserProvider);
+      }
 
-      //debugger
-      //let services2 = new Array;
-      /*La variable j se usa para asignar el idService a los eventos, para poder tener un metodo e identificar cada servicio,
-      ya que la cedula podría estar más de una vez*/
-      // let j = 1;
-
-      // if (services != null) {
-      //   for (var i = 0; i < this.services.length; i++) {
-      //     if (this.services[i].id == this.onlineUserProvider.id) {
-      //       this.servicesOnlineUserProviders.push(this.services[i]);
-      //       this.servicesOnlineUserProviders[i].idService = j + "";
-      //       j++;
-      //     }
-      //   }
-      //   localStorage.setItem(
-      //     "services",
-      //     JSON.stringify(this.servicesOnlineUserProviders)
-      //   );
-      // }
+      for (var i = 0; i < this.services.length; i++) {
+        if (this.services[i].id == this.onlineUserProvider.id) {
+          this.servicesOnlineUserProviders.push(this.services[i]);
+        }
+      }
 
       console.log(this.servicesOnlineUserProviders);
     },
