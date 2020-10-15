@@ -147,7 +147,7 @@ export default {
             "userProviders",
             JSON.stringify(this.userProviders)
           );
-          this.$router.push("/homeProvider");
+          this.$router.push("/");
         } else {
           alert("La persona que intenda crear ya existe");
         }

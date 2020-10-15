@@ -95,6 +95,11 @@ export default {
             );
             this.$router.push("/homeProvider");
           } else {
+            this.onlineUserClient = user;
+            localStorage.setItem(
+              "onlineUserClient",
+              JSON.stringify(this.onlineUserClient)
+            );
             this.$router.push("/homeClient");
           }
         } else {

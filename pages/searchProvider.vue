@@ -2,12 +2,12 @@
   <div>
     <v-data-table
       :headers="headers"
-      :items="servicesUserProviders"
+      :items="services"
       :items-per-page="10"
       class="elevation-1"
     >
       <template v-slot:[`item.actions`]="{ item }">
-        <v-icon small class="mdi-phone" @click="loadUser(item)">
+        <v-icon small class="mdi-phone" @click="getService(item)">
           mdi-phone
         </v-icon>
       </template>
@@ -19,10 +19,26 @@
         >
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="blue darken-1" text @click="cancelDialog()"
-            >Cancel</v-btn
-          >
-          <v-btn color="blue darken-1" text>OK</v-btn>
+
+          <v-row>
+            <v-col cols="12" sm="6">
+              <a
+                href="https://api.whatsapp.com/send?phone=573137364711&text=Bienvenido"
+                target="_blank"
+              >
+                <v-icon class="mdi-whatsapp">mdi-whatsapp </v-icon>
+              </a>
+            </v-col>
+          </v-row>
+          <v-spacer></v-spacer>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-btn color="blue darken-1" text @click="cancelDialog()"
+                >Cancel</v-btn
+              >
+            </v-col>
+          </v-row>
+
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
@@ -35,6 +51,7 @@ export default {
   layout: "defaultClient",
   beforeMount() {
     this.loadInfo();
+    console.log(this.contracts);
   },
   data() {
     return {
@@ -42,14 +59,32 @@ export default {
       services: [],
       userProviders: [],
       userProvider: {},
+      onlineUserClient: {},
       service: {},
+      contracts: [],
+      contract: {
+        idContract: null,
+        idService: null,
+        idProvider: null,
+        idClient: null,
+
+        nameFile: null,
+        pathFile: null,
+
+        isTotalAceptedProvider: null,
+        isTotalAceptedClient: null,
+
+        isAceptedProvider: null,
+        isAceptedClient: null,
+        dataFile: null,
+      },
       headers: [
-        { text: "nombre del proovedor", value: "id" },
+        { text: "nombre del proovedor", value: "idService" },
         { text: "Descripcion del servicio", value: "description" },
         { text: "Rango de disponibilidad", value: "initDate" },
         { text: "Rando de disponiblidad", value: "finDate" },
         { text: "Valor total", value: "total" },
-        { text: "Actions", value: "actions" },
+        { text: "Opciones", value: "actions" },
       ],
       dialogContact: false,
     };
@@ -57,16 +92,50 @@ export default {
   methods: {
     loadInfo() {
       let services = localStorage.getItem("services");
-      let userProvider = localStorage.getItem("userProviders");
 
-      if (services != null && userProvider != null) {
+      let onlineUserClient = localStorage.getItem("onlineUserClient");
+      let contracts = localStorage.getItem("contracts");
+
+      if (services != null || onlineUserClient != null) {
         this.services = JSON.parse(services);
-        this.userProviders = JSON.parse(userProvider);
-        this.servicesUserProviders = this.services;
+
+        this.onlineUserClient = JSON.parse(onlineUserClient);
+      }
+      if (contracts != null) {
+        this.contracts = JSON.parse(contracts);
       }
     },
-    loadUser(user) {
+    getService(service) {
+      //validacion exitencia
       this.dialogContact = true;
+      this.contract.idService = service.idService;
+      this.contract.idProvider = service.id;
+      this.contract.idClient = this.onlineUserClient.id;
+
+      if (this.contracts.length != 0) {
+        for (var i = 0; i < this.contracts.length; i++) {
+          if (this.contracts.length - 1 == i) {
+            this.contract.idContract = i + 2;
+          }
+        }
+      } else {
+        this.contract.idContract = 1;
+      }
+
+      console.log(this.contract);
+      this.contracts.push(this.contract);
+      localStorage.setItem("contracts", JSON.stringify(this.contracts));
+      this.contract = {
+        nameFile: null,
+        pathFile: null,
+
+        isTotalAceptedProvider: null,
+        isTotalAceptedClient: null,
+
+        isAceptedProvider: null,
+        isAceptedClient: null,
+        dataFile: null,
+      };
     },
     cancelDialog() {
       this.dialogContact = false;

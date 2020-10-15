@@ -84,29 +84,26 @@ export default {
       if (services != null) {
         this.services = JSON.parse(services);
       }
-
-      let j = 1;
-
-      if (this.services != null) {
-        for (var i = 0; i < this.services.length; i++) {
-          this.services[i].idService = j + "";
-          j++;
-        }
-      }
-      localStorage.setItem("services", JSON.stringify(this.services));
-      console.log(this.service);
     },
 
     createService() {
       if (this.$refs.formService.validate() && this.formService) {
         this.service.id = this.onlineUserProvider.id;
-
         this.service.initDate = this.dates[0];
         this.service.finDate = this.dates[this.dates.length - 1];
 
+        if (this.services.length != 0) {
+          for (var i = 0; i < this.services.length; i++) {
+            if (this.services.length - 1 == i) {
+              this.service.idService = i + 2;
+            }
+          }
+        } else {
+          this.service.idService = 1;
+        }
+
         this.services.push(this.service);
 
-        console.log(this.services);
         localStorage.setItem("services", JSON.stringify(this.services));
         this.service = {};
       }

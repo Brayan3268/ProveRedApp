@@ -118,29 +118,33 @@ export default {
       let services = localStorage.getItem("services");
       this.services = JSON.parse(services);
       console.log(services);
-
+      if (services != null) {
+        this.services = services;
+      }
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       this.onlineUserProvider = JSON.parse(onlineUserProvider);
       console.log(onlineUserProvider);
+
       //debugger
       //let services2 = new Array;
       /*La variable j se usa para asignar el idService a los eventos, para poder tener un metodo e identificar cada servicio,
       ya que la cedula podría estar más de una vez*/
-      let j = 1;
+      // let j = 1;
 
-      if (services != null) {
-        for (var i = 0; i < this.services.length; i++) {
-          if (this.services[i].id == this.onlineUserProvider.id) {
-            this.servicesOnlineUserProviders.push(this.services[i]);
-            this.servicesOnlineUserProviders[i].idService = j + "";
-            j++;
-          }
-        }
-        localStorage.setItem(
-          "services",
-          JSON.stringify(this.servicesOnlineUserProviders)
-        );
-      }
+      // if (services != null) {
+      //   for (var i = 0; i < this.services.length; i++) {
+      //     if (this.services[i].id == this.onlineUserProvider.id) {
+      //       this.servicesOnlineUserProviders.push(this.services[i]);
+      //       this.servicesOnlineUserProviders[i].idService = j + "";
+      //       j++;
+      //     }
+      //   }
+      //   localStorage.setItem(
+      //     "services",
+      //     JSON.stringify(this.servicesOnlineUserProviders)
+      //   );
+      // }
+
       console.log(this.servicesOnlineUserProviders);
     },
     loadService(service) {

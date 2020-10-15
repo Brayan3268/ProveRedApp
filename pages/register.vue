@@ -78,7 +78,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+          <v-btn color="accent" text @click="dialog = false"> Cerrar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -137,10 +137,10 @@ export default {
           if (this.user.rol == "Proveedor") {
             this.$router.push("/formProvider");
           } else {
-            this.$router.push("/homeClient");
+            this.$router.push("/");
           }
         } else {
-          alert("La persona que intenda crear ya esta en la tabla");
+          alert("La persona que intenda crear ya tiene una cuenta");
         }
       } else {
         this.dialog = true;
