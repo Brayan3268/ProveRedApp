@@ -16,7 +16,7 @@
         prepend-icon="mdi-camera"
       ></v-file-input>
 
-      <v-btn @click="sendInfo">Subir informacion</v-btn>
+      <v-btn @click="sendInfo()">Subir informacion</v-btn>
     </v-container>
 
     <v-container>
@@ -177,8 +177,8 @@ export default {
       (v) => (v && v.length <= 300 && v.length > 10) || "",
     ],
 
-    dialog: null,
-    dialog2: null,
+    dialog: false,
+    dialog2: false,
 
     users: [],
     usersProviders: [],
