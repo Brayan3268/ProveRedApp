@@ -22,6 +22,7 @@
         class="mt-md-6 px-md-6"
         type="date"
         required
+        :rules="nameRules"
       ></v-text-field>
 
       <v-text-field
@@ -30,6 +31,7 @@
         class="mt-md-6 px-md-6"
         type="date"
         required
+        :rules="nameRules"
       ></v-text-field>
 
       <v-textarea
@@ -38,6 +40,7 @@
         label="Descripcion"
         class="mt-md-6 px-md-6"
         required
+        :rules="nameRules"
       ></v-textarea>
 
       <v-text-field
@@ -46,6 +49,7 @@
         label="Total"
         class="mt-md-6 px-md-6"
         required
+        :rules="nameRules"
       ></v-text-field>
       <v-col cols="12" md="4">
         <v-btn
@@ -69,7 +73,28 @@
         <v-icon small class="mr-2" @click="loadService(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteService(item)"> mdi-delete </v-icon>
+        <v-icon small @click="dialogD = true"> mdi-delete </v-icon>
+
+        <v-dialog v-model="dialogD" persistent>
+          <v-card>
+            <v-card-title class="headline">
+              Eliminacion de servicio</v-card-title
+            >
+
+            <v-card-text> ¿Seguro que quieres eliminar cuenta?</v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="accent" text @click="deleteService(item)">
+                Aceptar
+              </v-btn>
+              <v-btn color="accent" text @click="dialogD = false">
+                Cancelar
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-data-table>
 
@@ -80,7 +105,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="goToMenu()"> Close </v-btn>
+          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -110,6 +135,7 @@ export default {
       formEdit: null,
       dialogR: false,
       dialog: false,
+      dialogD: false,
       headers: [
         { text: "Cedula", value: "id" },
         { text: "ID del servicio", value: "idService" },
@@ -145,6 +171,10 @@ export default {
       //Indica si esta en un proceso de edicion o no
       editing: false,
       services3: null,
+      nameRules: [
+        (v) => !!v || "El campo es requerido",
+        (v) => (v && v.length <= 40) || "",
+      ],
     };
   },
   methods: {
@@ -198,18 +228,20 @@ export default {
     },
 
     deleteService(service) {
-      let services = localStorage.getItem("services");
-      this.services = JSON.parse(services);
+      if (true) {
+        let services = localStorage.getItem("services");
+        this.services = JSON.parse(services);
 
-      var posToDelete = this.services.findIndex(
-        (x) => x.idService == service.idService
-      );
-      if (posToDelete != -1) {
-        this.services.splice(posToDelete, 1);
-        localStorage.setItem("services", JSON.stringify(this.services));
+        var posToDelete = this.services.findIndex(
+          (x) => x.idService == service.idService
+        );
+        if (posToDelete != -1) {
+          this.services.splice(posToDelete, 1);
+          localStorage.setItem("services", JSON.stringify(this.services));
+        }
+        console.log(this.services);
+        window.location.reload();
       }
-      console.log(this.services);
-      window.location.reload();
     },
   },
 };

@@ -79,6 +79,12 @@ export default {
           icon: "mdi-clipboard-account",
           route: "/myServiceNewsAndActives",
         },
+        {
+          id: "07",
+          title: "Contratos en procesos",
+          icon: "mdi-book-open",
+          route: "/myContractsProcess",
+        },
       ],
     };
   },
