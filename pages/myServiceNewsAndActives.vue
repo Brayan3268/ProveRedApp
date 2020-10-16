@@ -33,7 +33,34 @@
         v-model="service.total"
       ></v-text-field>
     </v-form>
+    <v-dialog v-model="dialog" max-width="290">
+      <v-card>
+        <v-card-title class="headline"> Error </v-card-title>
 
+        <v-card-text> Llene todos los campos </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="accent" text @click="dialog = false"> Cerrar </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogCreateService" max-width="290">
+      <v-card>
+        <v-card-title class="headline"> Servicio creado </v-card-title>
+
+        <v-card-text> Se ha creado un nuevo Servicio </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="accent" text @click="dialogCreateService = false">
+            OK
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
     <v-btn @click="createService()" color="primary">Nuevo servicio</v-btn>
   </div>
 </template>
@@ -47,6 +74,8 @@ export default {
     //window.location.reload();
   },
   data: () => ({
+    dialog: false,
+    dialogCreateService: false,
     formService: null,
     dates: [],
     serviceRules: [
@@ -106,6 +135,9 @@ export default {
 
         localStorage.setItem("services", JSON.stringify(this.services));
         this.service = {};
+        this.dialogCreateService = true;
+      } else {
+        this.dialog = true;
       }
     },
   },

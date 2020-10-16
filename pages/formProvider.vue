@@ -147,6 +147,7 @@ export default {
             "userProviders",
             JSON.stringify(this.userProviders)
           );
+          alert("Proveedor registrado correctamete");
           this.$router.push("/");
         } else {
           alert("La persona que intenda crear ya existe");

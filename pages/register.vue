@@ -135,8 +135,10 @@ export default {
           this.users.push(this.user);
           localStorage.setItem("users", JSON.stringify(this.users));
           if (this.user.rol == "Proveedor") {
+            alert("Proveedor en proceso de registro");
             this.$router.push("/formProvider");
           } else {
+            alert("Cliente registrado correctamete");
             this.$router.push("/");
           }
         } else {
