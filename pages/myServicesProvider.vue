@@ -1,56 +1,65 @@
 <template>
   <div>
-    <h1>Mis servicios activos</h1>
-    <v-text-field
-      v-model="servicesOnlineUserProvider.id"
-      label="Cedula"
-      class="mt-md-6 px-md-6"
-      disabled
-    ></v-text-field>
+    <v-form ref="formEdit" v-model="formEdit" lazy-validation>
+      <h1>Mis servicios activos</h1>
+      <v-text-field
+        v-model="servicesOnlineUserProvider.id"
+        label="Cedula"
+        class="mt-md-6 px-md-6"
+        disabled
+      ></v-text-field>
 
-    <v-text-field
-      v-model="servicesOnlineUserProvider.idService"
-      label="ID del servicio"
-      class="mt-md-6 px-md-6"
-      disabled
-    ></v-text-field>
+      <v-text-field
+        v-model="servicesOnlineUserProvider.idService"
+        label="ID del servicio"
+        class="mt-md-6 px-md-6"
+        disabled
+      ></v-text-field>
 
-    <v-text-field
-      v-model="servicesOnlineUserProvider.initDate"
-      label="Fecha de incio del evento"
-      class="mt-md-6 px-md-6"
-      type="date"
-      required
-    ></v-text-field>
+      <v-text-field
+        v-model="servicesOnlineUserProvider.initDate"
+        label="Fecha de incio del evento"
+        class="mt-md-6 px-md-6"
+        type="date"
+        required
+        :rules="nameRules"
+      ></v-text-field>
 
-    <v-text-field
-      v-model="servicesOnlineUserProvider.finDate"
-      label="Fecha final del evento"
-      class="mt-md-6 px-md-6"
-      type="date"
-      required
-    ></v-text-field>
+      <v-text-field
+        v-model="servicesOnlineUserProvider.finDate"
+        label="Fecha final del evento"
+        class="mt-md-6 px-md-6"
+        type="date"
+        required
+        :rules="nameRules"
+      ></v-text-field>
 
-    <v-textarea
-      v-model="servicesOnlineUserProvider.description"
-      :counter="300"
-      label="Descripcion"
-      class="mt-md-6 px-md-6"
-      required
-    ></v-textarea>
+      <v-textarea
+        v-model="servicesOnlineUserProvider.description"
+        :counter="300"
+        label="Descripcion"
+        class="mt-md-6 px-md-6"
+        required
+        :rules="nameRules"
+      ></v-textarea>
 
-    <v-text-field
-      v-model="servicesOnlineUserProvider.total"
-      type="number"
-      label="Total"
-      class="mt-md-6 px-md-6"
-      required
-    ></v-text-field>
-    <v-col cols="12" md="4">
-      <v-btn class="md- 600 mt-6 px-md-6" @click="editService()" v-if="editing"
-        >Editar servicio</v-btn
-      >
-    </v-col>
+      <v-text-field
+        v-model="servicesOnlineUserProvider.total"
+        type="number"
+        label="Total"
+        class="mt-md-6 px-md-6"
+        required
+        :rules="nameRules"
+      ></v-text-field>
+      <v-col cols="12" md="4">
+        <v-btn
+          class="md- 600 mt-6 px-md-6"
+          @click="editService()"
+          v-if="editing"
+          >Editar servicio</v-btn
+        >
+      </v-col>
+    </v-form>
 
     <v-data-table
       class="mt-md-6 px-md-6"
@@ -64,12 +73,58 @@
         <v-icon small class="mr-2" @click="loadService(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="deleteService(item)"> mdi-delete </v-icon>
+        <v-icon small @click="dialogD = true"> mdi-delete </v-icon>
+
+        <v-dialog v-model="dialogD" persistent>
+          <v-card>
+            <v-card-title class="headline">
+              Eliminacion de servicio</v-card-title
+            >
+
+            <v-card-text> ¿Seguro que quieres eliminar cuenta?</v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+
+              <v-btn color="accent" text @click="deleteService(item)">
+                Aceptar
+              </v-btn>
+              <v-btn color="accent" text @click="dialogD = false">
+                Cancelar
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
       </template>
     </v-data-table>
+
+    <v-dialog v-model="dialog" max-width="290" persistent>
+      <v-card>
+        <v-card-text> Servicio editado con exito, muchas gracias </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+    <v-dialog v-model="dialogR" max-width="290">
+      <v-card>
+        <v-card-title class="headline"> Error </v-card-title>
+
+        <v-card-text> Llene todos los campos </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn color="accent" text @click="dialogR = false"> Cerrar </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
-
+ 
 <script>
 export default {
   beforeMount() {
@@ -77,6 +132,10 @@ export default {
   },
   data() {
     return {
+      formEdit: null,
+      dialogR: false,
+      dialog: false,
+      dialogD: false,
       headers: [
         { text: "Cedula", value: "id" },
         { text: "ID del servicio", value: "idService" },
@@ -114,6 +173,10 @@ export default {
       //Indica si esta en un proceso de edicion o no
       editing: false,
       services3: null,
+      nameRules: [
+        (v) => !!v || "El campo es requerido",
+        (v) => (v && v.length <= 40) || "",
+      ],
     };
   },
   methods: {
@@ -142,39 +205,45 @@ export default {
       this.services3 = service;
     },
     editService() {
-      let editedService = this.servicesOnlineUserProvider;
-      console.log(editedService);
-      let idEditedService = editedService.idService;
-      console.log(idEditedService);
-      for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
-        if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
-          this.servicesOnlineUserProvider[i] = editedService;
-          break;
+      if (this.$refs.formEdit.validate() && this.formEdit) {
+        let editedService = this.servicesOnlineUserProvider;
+        console.log(editedService);
+        let idEditedService = editedService.idService;
+        console.log(idEditedService);
+        for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
+          if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
+            this.servicesOnlineUserProvider[i] = editedService;
+            break;
+          }
         }
-      }
-      console.log("hola", this.servicesOnlineUserProvider);
-      console.log("hola2", this.servicesOnlineUserProviders);
 
-      localStorage.setItem(
-        "services",
-        JSON.stringify(this.servicesOnlineUserProviders)
-      );
-      this.servicesOnlineUserProvider = {};
-      this.editing = false;
+        localStorage.setItem(
+          "services",
+          JSON.stringify(this.servicesOnlineUserProviders)
+        );
+        this.servicesOnlineUserProvider = {};
+        this.editing = false;
+        this.dialog = true;
+      } else {
+        this.dialogR = true;
+      }
     },
-    deleteService(service) {
-      let services = localStorage.getItem("services");
-      this.services = JSON.parse(services);
 
-      var posToDelete = this.services.findIndex(
-        (x) => x.idService == service.idService
-      );
-      if (posToDelete != -1) {
-        this.services.splice(posToDelete, 1);
-        localStorage.setItem("services", JSON.stringify(this.services));
+    deleteService(service) {
+      if (true) {
+        let services = localStorage.getItem("services");
+        this.services = JSON.parse(services);
+
+        var posToDelete = this.services.findIndex(
+          (x) => x.idService == service.idService
+        );
+        if (posToDelete != -1) {
+          this.services.splice(posToDelete, 1);
+          localStorage.setItem("services", JSON.stringify(this.services));
+        }
+        console.log(this.services);
+        window.location.reload();
       }
-      console.log(this.services);
-      window.location.reload();
     },
   },
 };

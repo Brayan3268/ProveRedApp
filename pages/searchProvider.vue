@@ -96,10 +96,11 @@ export default {
       let onlineUserClient = localStorage.getItem("onlineUserClient");
       let contracts = localStorage.getItem("contracts");
 
-      if (services != null || onlineUserClient != null) {
-        this.services = JSON.parse(services);
-
+      if (onlineUserClient != null) {
         this.onlineUserClient = JSON.parse(onlineUserClient);
+      }
+      if (services != null) {
+        this.services = JSON.parse(services);
       }
       if (contracts != null) {
         this.contracts = JSON.parse(contracts);

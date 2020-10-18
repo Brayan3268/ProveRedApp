@@ -31,6 +31,10 @@ export default {
         isAceptedProvider: null,
         isAceptedClient: null,
         dataFile: null,
+        isProviderNotified: null,
+        isClientNotified: null,
+        //rechazar// isTotalAceptedClient: false,//isClientNotified: true,
+        //Aceptar// isTotalAceptedClient: true,//isClientNotified: true,
       },
     };
   },
