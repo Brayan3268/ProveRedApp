@@ -56,6 +56,7 @@ export default {
       id: null,
       email: null,
       password: null,
+      cellphoneNumber: null,
       entity: null,
       rol: null,
       nameCompany: null,

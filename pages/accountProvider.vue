@@ -46,6 +46,15 @@
         required
       ></v-text-field>
 
+      <v-text-field
+        v-model="userOnline.cellphoneNumber"
+        :rules="cellphoneNumber"
+        label="Numero de celular"
+        type="number"
+        class="px-md-6 mx-lg-auto"
+        required
+      ></v-text-field>
+
       <v-select
         v-model="userOnline.typeProvider"
         :items="typeProviderSelect"
@@ -168,6 +177,12 @@ export default {
     entity: ["Persona juridica", "Persona natural"],
     typeProviderSelect: ["Proveedor formal", "proveedor informal"],
 
+    cellphoneNumber: [
+      (v) => !!v || "El campo es requerido",
+      (v) => (v && v.length == 10) || "",,
+    ],
+
+
     emailRules: [
       (v) => !!v || "E-mail es requerido",
       (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -186,6 +201,7 @@ export default {
     userProvider: {},
     userOnline: {
       fullname: null,
+      cellphoneNumber: null,
       id: null,
       email: null,
       password: null,
@@ -204,6 +220,7 @@ export default {
       password: null,
       typeProvider: null,
       entity: null,
+      cellphoneNumber: null,
       companyName: null,
       serviceDescription: null,
     },
@@ -225,6 +242,7 @@ export default {
       nameCompany: null,
       typeProvider: null,
       serviceDescription: null,
+      cellphoneNumber: null,
     },
   }),
   methods: {
@@ -264,12 +282,14 @@ export default {
           (x) => x.id == this.userOnline.id
         );
         this.user = user;
+        this.user.cellphoneNumber = this.userOnline.cellphoneNumber;
         this.user.fullname = this.userOnline.fullname;
         this.user.email = this.userOnline.email;
         this.user.password = this.userOnline.password;
         this.user.typeProvider = this.userOnline.typeProvider;
 
         this.userProvider = userProvider;
+        this.userProvider.cellphoneNumber = this.userOnline.cellphoneNumber;
         this.userProvider.nameCompany = this.userOnline.nameCompany;
         this.userProvider.typeProvider = this.userOnline.typeProvider;
         this.userProvider.serviceDescription = this.userOnline.serviceDescription;

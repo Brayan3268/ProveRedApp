@@ -114,6 +114,7 @@ export default {
       id: null,
       nameCompany: null,
       typeProvider: null,
+      cellphoneNumber: null,
       serviceDescription: null,
     },
   }),

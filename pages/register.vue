@@ -40,6 +40,15 @@
         required
       ></v-text-field>
 
+      <v-text-field
+        v-model="user.cellphoneNumber"
+        :rules="cellphoneNumber"
+        label="Numero de celular"
+        type="number"
+        class="px-md-6 mx-lg-auto"
+        required
+      ></v-text-field>
+
       <v-select
         v-model="user.entity"
         :items="entity"
@@ -99,6 +108,10 @@ export default {
       (v) => !!v || "El campo es requerido",
       (v) => (v && v.length <= 40) || "",
     ],
+    cellphoneNumber: [
+      (v) => !!v || "El campo es requerido",
+      (v) => (v && v.length == 10) || "",,
+    ],
     email: "",
     emailRules: [
       (v) => !!v || "E-mail es requerido",
@@ -114,6 +127,7 @@ export default {
       id: null,
       email: null,
       password: null,
+      cellphoneNumber: null,
       entity: null,
       rol: null,
     },

@@ -97,6 +97,7 @@ export default {
         finDate: null,
         description: null,
         total: null,
+        
       },
 
       services: [],
@@ -107,6 +108,7 @@ export default {
         finDate: null,
         description: null,
         total: null,
+        
       },
 
       //Indica si esta en un proceso de edicion o no
