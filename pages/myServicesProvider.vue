@@ -2,6 +2,9 @@
   <div>
     <v-form ref="formEdit" v-model="formEdit" lazy-validation>
       <h1>Mis servicios activos</h1>
+
+      <v-row>
+        
       <v-text-field
         v-model="servicesOnlineUserProvider.id"
         label="Cedula"
@@ -34,11 +37,13 @@
         :rules="nameRules"
       ></v-text-field>
 
+      </v-row>
+
       <v-textarea
         v-model="servicesOnlineUserProvider.description"
         :counter="300"
         label="Descripcion"
-        class="mt-md-6 px-md-6"
+        style="width: 1000px; margin-left: 12px"
         required
         :rules="nameRules"
       ></v-textarea>
@@ -47,22 +52,24 @@
         v-model="servicesOnlineUserProvider.total"
         type="number"
         label="Total"
-        class="mt-md-6 px-md-6"
+        style="width: 200px; margin-left: 12px"
         required
         :rules="nameRules"
       ></v-text-field>
+
       <v-col cols="12" md="4">
         <v-btn
-          class="md- 600 mt-6 px-md-6"
+          style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px"
           @click="editService()"
           v-if="editing"
+          color="primary"
           >Editar servicio</v-btn
         >
       </v-col>
     </v-form>
 
     <v-data-table
-      class="mt-md-6 px-md-6"
+      style="margin-left: 12px"
       :headers="headers"
       :items="servicesOnlineUserProviders"
       :items-per-page="10"
@@ -80,16 +87,15 @@
             <v-card-title class="headline">
               Eliminacion de servicio</v-card-title
             >
-
-            <v-card-text> ¿Seguro que quieres eliminar cuenta?</v-card-text>
+            <v-card-text> ¿Seguro que quieres eliminar este servicio?</v-card-text>
 
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="accent" text @click="deleteService(item)">
+              <v-btn color="primary" text @click="deleteService(item)">
                 Aceptar
               </v-btn>
-              <v-btn color="accent" text @click="dialogD = false">
+              <v-btn color="primary" text @click="dialogD = false">
                 Cancelar
               </v-btn>
             </v-card-actions>
@@ -105,7 +111,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+          <v-btn color="primary" text @click="dialog = false"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -118,7 +124,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialogR = false"> Cerrar </v-btn>
+          <v-btn color="primary" text @click="dialogR = false"> Cerrar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

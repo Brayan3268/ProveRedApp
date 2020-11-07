@@ -1,32 +1,42 @@
 <template>
   <div>
     <v-form ref="formEdit" v-model="formEdit" lazy-validation>
-      <v-container>
+      <v-container >
         <h1>Cuenta del proveedor</h1>
 
+        <v-row>
         <p>Subir documentos sobre mis servicios</p>
+        
+        <p
+        style="margin-left: 290px;">Adjuntar informacion</p>
+        </v-row>
+
+        <v-row>
         <v-file-input
           truncate-length="15"
           label="Subir multimedia"
+          style="width: 410px; height: 50px;"
         ></v-file-input>
 
-        <p>Adjuntar informacion</p>
         <v-file-input
           accept="image/png, image/jpeg, image/bmp"
           label="Fotos del producto o servicio"
           prepend-icon="mdi-camera"
+          style="width: 500px; height: 50px; margin-left: 40px;"
         ></v-file-input>
-
-        <v-btn @click="sendInfo()">Subir informacion</v-btn>
+        </v-row>
+      
+        <v-btn @click="sendInfo()" style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary">Subir ambos archivos </v-btn>
       </v-container>
 
-      <v-container>
+      <v-container style="margin-top: 50px">
+        <v-row>
         <v-text-field
           v-model="user.fullname"
           :counter="40"
           :rules="nameRules"
           label="Nombre completo"
-          class="mt-md-6 px-md-6"
+          style="margin-left: 30px;"
           required
         ></v-text-field>
 
@@ -34,7 +44,7 @@
           v-model="user.email"
           :rules="emailRules"
           label="E-mail"
-          class="px-md-6 mx-lg-auto"
+          style="margin-left: 30px;"
           required
         ></v-text-field>
 
@@ -43,7 +53,7 @@
           :counter="10"
           :rules="nameRules"
           label="Contraseña"
-          class="px-md-6 mx-lg-auto"
+          style="margin-left: 30px;"
           required
         ></v-text-field>
 
@@ -52,16 +62,19 @@
           :counter="10"
           :rules="nameRules"
           label="Numero de celular"
-          class="px-md-6 mx-lg-auto"
+          style="margin-left: 30px;"
           required
         ></v-text-field>
+        </v-row>
 
+        <v-row>
         <v-select
           v-model="user.typeProvider"
           :items="typeProviderSelect"
           :rules="[(v) => !!v || 'Item is required']"
           label="Tipo de proveedor"
           class="px-md-6 mx-lg-auto"
+          style="width: 300px; margin-left: 0px;"
           required
         ></v-select>
 
@@ -70,7 +83,8 @@
           :items="entity"
           :rules="[(v) => !!v || 'Item is required']"
           label="Entidad"
-          class="px-md-6 mx-lg-auto"
+          class="px-md-0"
+          style="width: 80px; margin-left: 30px;" 
           required
         ></v-select>
 
@@ -79,27 +93,28 @@
           :counter="40"
           :rules="nameRules"
           label="Nombre de la Empresa"
-          class="mt-md-6 px-md-6"
+          style="width: 80px; margin-left: 30px;"
           required
         ></v-text-field>
+        </v-row>
 
         <v-textarea
           v-model="user.serviceDescription"
           :counter="300"
           :rules="serviceRules"
-          class="px-md-6 mx-lg-auto"
           label="Describa su servicio(s)"
+          style="width: 1000px; margin-left: 12px;"
         ></v-textarea>
 
-        <v-btn @click="editUser()">Editar</v-btn>
+        <v-btn style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary" @click="editUser()">Editar</v-btn>
       </v-container>
     </v-form>
 
-    <v-form ref="formDialog" v-model="formDialog" lazy-validation>
+    <v-form style="margin-top: 50px" ref="formDialog" v-model="formDialog" lazy-validation>
       <v-container>
         <h1>!ELIMINAR MI CUENTA¡</h1>
 
-        <p>
+        <p style="width: 970px;">
           En esta seccion podras eliminar tu cuenta de proveedor, nos borra la
           sonrisa tu partida, así que antes te pedimos que nos cuentes porque te
           vas y te deseamos el mejor de los viajes.
@@ -108,7 +123,7 @@
         <v-text-field
           v-model="reasonForDeleteAccount.id"
           label="Cedula"
-          class="px-md-6 mx-lg-auto"
+          style="width: 200px;"
           disabled
           required
         ></v-text-field>
@@ -117,11 +132,11 @@
           v-model="reasonForDeleteAccount.reason"
           :counter="300"
           :rules="serviceRules"
-          class="mt-md-6 px-md-6"
+          style="width: 1000px;"
           label="Cuentanos tus motivos"
         ></v-textarea>
 
-        <v-btn class="mt-md-6 px-md-6" @click="deleteAccountProvider1()"
+        <v-btn style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary" @click="deleteAccountProvider1()"
           >Eliminar cuenta</v-btn
         >
       </v-container>
@@ -135,7 +150,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="goToMenu()"> Close </v-btn>
+          <v-btn color="primary" text @click="goToMenu()"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -152,7 +167,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog2 = false"> Close </v-btn>
+          <v-btn color="primary" text @click="dialog2 = false"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -355,6 +370,9 @@ export default {
       }
     },
     deleteAccountProvider1() {
+
+      /**Eliminar los servicios del proveedor al eliminar el proveedor*/
+
       if (this.$refs.formDialog.validate() && this.formDialog) {
         let id = this.reasonForDeleteAccount.id;
         let userProvSave = null;

@@ -17,7 +17,7 @@
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
-        input
+        input type="number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>

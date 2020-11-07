@@ -1,37 +1,44 @@
 <template>
-<div>
-    <v-container v-if="!isInProcessContract">
+<div style="width: 30; ">
+    <v-container v-if="!isInProcessContract" style="width: 30;">
     <v-text-field 
         v-model="contract.idContract"
         label="ID del contrato"
         type = "number"
+        style="width: 390px;"
         required
     ></v-text-field>
 
-    <v-btn @click="searchContractInProcess()">Buscar</v-btn>
+    <v-btn 
+      color="primary" 
+      style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" 
+      @click="searchContractInProcess()">
+      Buscar
+    </v-btn>
 
     </v-container>
     <!-- QUITAR LA NEGACION DE EL CONTAINER DE ABAJO AL MOMENTO DE PODER TRABAJAR CON CONTRATOS QUE VENGAN DEL LOCALSTORAGE -->
     <v-container v-if="!isInProcessContract">
       <h1>Mis contratos en proceso</h1>
 
-      <p>Subir documento de el proceso(contrato)</p>
+      <p>Subir documento de el proceso (contrato)</p>
       <v-file-input
         v-model="contract.dataFile"
         truncate-length="15"
         label="Subir pdf"
         accept =".pdf"
+        style="width: 410px; height: 50px;"
       ></v-file-input>
 
       <v-container v-if="!negotiateInProcess">
-        <v-btn @click="acceptedContract()" v-if="documentsUp">Aceptar contrato</v-btn>
-        <v-btn @click="rejectedContract()" v-if="documentsUp">Rechazar contrato</v-btn>
+        <v-btn color="primary" @click="acceptedContract()" v-if="documentsUp">Aceptar contrato</v-btn>
+        <v-btn color="primary" @click="rejectedContract()" v-if="documentsUp">Rechazar contrato</v-btn>
     
-        <v-btn @click="upDocuments()" v-else>Subir documento</v-btn>
+        <v-btn color="primary" style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px"  @click="upDocuments()" v-else>Subir documento</v-btn>
       </v-container>
       
-      <v-btn @click="negotiateContract()" v-if="negotiateInProcess">Negociar contrato</v-btn>
-      <v-btn @click="confirmRejectedContract()" v-if="negotiateInProcess">Comfirmar Rechazar contrato</v-btn>
+      <v-btn color="primary" @click="negotiateContract()" v-if="negotiateInProcess">Negociar contrato</v-btn>
+      <v-btn color="primary" @click="confirmRejectedContract()" v-if="negotiateInProcess">Comfirmar Rechazar contrato</v-btn>
 
     </v-container>
 
@@ -42,7 +49,7 @@
         <v-card-text> No tiene contratos en proceso por el momento </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="dialog = false"> Aceptar </v-btn>
+          <v-btn text @click="dialog = false" color="primary"> Aceptar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -54,7 +61,7 @@
             por favor espere la respuesta del cliente </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="dialog2 = false"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialog2 = false"> Aceptar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -66,8 +73,8 @@
             (El cliente aún no ha respuesto sobre este contrato). </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="accepted()"> Aceptar </v-btn>
-          <v-btn color="accent" text @click="dialogIsWantAccepted = false"> Cancelar </v-btn>
+          <v-btn color="primary" text @click="accepted()"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialogIsWantAccepted = false"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -79,8 +86,8 @@
             (El cliente ya ha aceptado este contrato). </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="accepted()"> Aceptar </v-btn>
-          <v-btn color="accent" text @click="dialog3 = false"> Cancelar </v-btn>
+          <v-btn color="primary" text @click="accepted()"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialog3 = false"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -92,8 +99,8 @@
             (El cliente ya ha aceptado este contrato). </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="rejected()"> Aceptar </v-btn>
-          <v-btn color="accent" text @click="dialogTotalRejected = false"> Cancelar </v-btn>
+          <v-btn color="primary" text @click="rejected()"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialogTotalRejected = false"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -105,8 +112,8 @@
             (El cliente aún no ha respuesto sobre este contrato). </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="rejected()"> Aceptar </v-btn>
-          <v-btn color="accent" text @click="dialogIsWantRejected = false"> Cancelar </v-btn>
+          <v-btn color="primary" text @click="rejected()"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialogIsWantRejected = false"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -118,7 +125,7 @@
             por favor espere la respuesta del cliente </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="dialogRejected2 = false"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialogRejected2 = false"> Aceptar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -130,8 +137,8 @@
             (El cliente ya ha rechazado este contrato). </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="rejected()"> Aceptar </v-btn>
-          <v-btn color="accent" text @click="dialogRejected3 = false"> Cancelar </v-btn>
+          <v-btn color="primary" text @click="rejected()"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="dialogRejected3 = false"> Cancelar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -144,7 +151,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
-          <v-btn color="accent" text @click="negotiationContractDialog = false"> Aceptar </v-btn>
+          <v-btn color="primary" text @click="negotiationContractDialog = false"> Aceptar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -157,6 +164,7 @@
 export default {
   beforeMount() {
     this.loadInfo();
+    /** HACER QUE CUANDO SE ENTRE A ESTA PESTAÑA SE MIRE SI TIENE ALGUNA NOTIFICACION PENDIENTE */
   },
 
   beforeUpdate() {
