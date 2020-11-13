@@ -27,7 +27,7 @@
             </v-card-text>
             <v-card-actions>
               <v-spacer></v-spacer>
-              <v-btn @click="login()" color="primary">Ingresar</v-btn>
+              <v-btn @click="Login()" color="primary">Ingresar</v-btn>
               <v-btn @click="goToRegister()" color="primary">Registrarme</v-btn>
             </v-card-actions>
           </v-card>
@@ -41,14 +41,11 @@
 import homeClientVue from "./homeClient.vue";
 export default {
   layout: "blank",
-  beforeMount() {
-    this.loadUsers();
-    this.loadUsersProviders();
-    console.log(this.users);
-  },
+  beforeMount() {},
   data: () => ({
     id: null,
     password: null,
+
     users: [],
     userProviders: [],
     onlineUserProvider: {
@@ -62,21 +59,60 @@ export default {
       nameCompany: null,
       typeProvider: null,
       serviceDescription: null,
+      averagepunctuation: null,
     },
     onlineUserClient: {},
   }),
   methods: {
-    loadUsers() {
-      let users = localStorage.getItem("users");
-      if (users != null) {
-        this.users = JSON.parse(users);
-      }
+    loadUser(id) {
+      let user = {};
+      let userProvider = {};
+      const url = "http://localhost:3001/users/" + id;
+      let token = localStorage.getItem("token");
+      this.$axios.setToken(token, "Bearer");
+      this.$axios
+        .get(url)
+        .then((res) => {
+          user = res.data.info[0];
+          if (user.rol === "Proveedor") {
+            this.onlineUserProvider = user;
+            this.loadUsersProviders(id);
+            this.$router.push("/homeProvider");
+          } else {
+            this.onlineUserClient = user;
+            localStorage.setItem(
+              "onlineUserClient",
+              JSON.stringify(this.onlineUserClient)
+            );
+            this.$router.push("/homeClient");
+          }
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
-    loadUsersProviders() {
-      let usersProvider = localStorage.getItem("userProviders");
-      if (usersProvider != null) {
-        this.userProviders = JSON.parse(usersProvider);
-      }
+    loadUsersProviders(id) {
+      const url = "http://localhost:3001/api/v2/providers/" + id;
+      let data = {};
+      this.$axios
+        .get(url)
+        .then((res) => {
+          let userProvider = res.data.info[0];
+          console.log("userProvider ", userProvider);
+          this.onlineUserProvider.nameCompany = userProvider.companyname;
+          this.onlineUserProvider.typeProvider = userProvider.typeprovider;
+          this.onlineUserProvider.serviceDescription =
+            userProvider.servicedescription;
+          this.onlineUserProvider.averagepunctuation =
+            userProvider.averagepunctuation;
+          localStorage.setItem(
+            "onlineUserProvider",
+            JSON.stringify(this.onlineUserProvider)
+          );
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
     login() {
       let user = this.users.find((x) => x.id == this.id);
@@ -112,10 +148,24 @@ export default {
 
       console.log(this.id, this.password);
     },
+    Login() {
+      const url = "http://localhost:3001/api/v2/users/login";
+      let data = {};
+      data.id = this.id;
+      data.password = this.password;
+      this.$axios
+        .post(url, data)
+        .then((res) => {
+          localStorage.setItem("token", res.data.info);
+          this.loadUser(this.id);
+        })
+        .catch((err) => {
+          alert("Usuario o contraseña incorrecta");
+        });
+    },
     goToRegister() {
       this.$router.push("/register");
     },
-    getOnlineUser(user) {},
   },
 };
 </script>

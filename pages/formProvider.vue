@@ -121,16 +121,17 @@ export default {
 
   methods: {
     loadUsers() {
-      let users = localStorage.getItem("users");
-      if (users != null) {
-        this.users = JSON.parse(users);
-      }
-      console.log(this.users);
+      
+      // let users = localStorage.getItem("users");
+      // if (users != null) {
+      //   this.users = JSON.parse(users);
+      // }
+      // console.log(this.users);
 
-      let userProviders = localStorage.getItem("userProviders");
-      if (userProviders != null) {
-        this.userProviders = JSON.parse(userProviders);
-      }
+      // let userProviders = localStorage.getItem("userProviders");
+      // if (userProviders != null) {
+      //   this.userProviders = JSON.parse(userProviders);
+      // }
     },
 
     loadUser(user) {
