@@ -87,12 +87,14 @@
       <v-btn @click="editUser">Editar</v-btn>
     </v-container>
 
-    <!--permite eliminar la cuenta de acceso creada, dejando como huella una razón de dicha acción a modo de retroalimentación-->
+    <!--da paso a la eliminación de la cuenta de acceso creada, dejando como huella una razón de dicha acción a modo de retroalimentación-->
     <v-container>
       <h1>!ELIMINAR MI CUENTA¡</h1>
 
-      <p>En esta seccion podras eliminar tu cuenta de proveedor, nos borra la sonrisa tu partida, así que antes
-        te pedimos que nos cuentes porque te vas y te deseamos el mejor de los viajes.
+      <p>
+        En esta seccion podras eliminar tu cuenta de proveedor, nos borra la
+        sonrisa tu partida, así que antes te pedimos que nos cuentes porque te
+        vas y te deseamos el mejor de los viajes.
       </p>
 
       <v-text-field
@@ -111,9 +113,9 @@
         label="Cuentanos tus motivos"
       ></v-textarea>
 
-      <v-btn class = "mt-md-6 px-md-6" 
-      @click="deleteAccountProvider1()"
-      >Eliminar cuenta</v-btn>
+      <v-btn class="mt-md-6 px-md-6" @click="deleteAccountProvider1()"
+        >Eliminar cuenta</v-btn
+      >
     </v-container>
 
     <!-- crea dialogos que dan cuenta de la correcta realización de la eliminación de una cuenta-->
@@ -135,7 +137,10 @@
       <v-card>
         <v-card-title class="headline"> Eliminacion de cuenta </v-card-title>
 
-        <v-card-text> Ocurrio un error a la hora de eliminar la cuenta, intentalo de nuevo más tarde </v-card-text>
+        <v-card-text>
+          Ocurrio un error a la hora de eliminar la cuenta, intentalo de nuevo
+          más tarde
+        </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -144,7 +149,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
   </div>
 </template>
 <script>
@@ -159,6 +163,7 @@ export default {
 
   beforeUpdate() {
     this.loadUsers();
+    this.loadInfo();
   },
   data: () => ({
     /*Reglas para los campos*/
@@ -228,7 +233,6 @@ export default {
       typeProvider: null,
       serviceDescription: null,
     },
-
   }),
   methods: {
     //carga los usuarios almacenados localmente y convierte sus datos a JSON
@@ -239,12 +243,14 @@ export default {
       let userProviders2 = localStorage.getItem("userProviders");
       this.userProviders2 = JSON.parse(userProviders2);
 
-      let reasonsForDeleteAccounts = localStorage.getItem("reasonsForDeleteAccounts");
-      if(reasonsForDeleteAccounts != null){
+      let reasonsForDeleteAccounts = localStorage.getItem(
+        "reasonsForDeleteAccounts"
+      );
+      if (reasonsForDeleteAccounts != null) {
         this.reasonsForDeleteAccounts = JSON.parse(reasonsForDeleteAccounts);
       }
     },
-    ///////////////////////////////////////////////////////////////////////////////////////
+    
     loadInfo() {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       let users = localStorage.getItem("users");
@@ -291,42 +297,47 @@ export default {
     // elimina la cuenta del proveedor, guardando su razón para eliminar la cuenta
     deleteAccountProvider1() {
       debugger
-      let isDo = false;
       let id = this.reasonForDeleteAccount.id;
       let userProvSave = null;
       let userSave = null;
-      if(id.length >= 1){
+      if (id.length >= 1) {
         this.reasonsForDeleteAccounts.push(this.reasonForDeleteAccount);
-        localStorage.setItem("reasonsForDeleteAccounts", JSON.stringify(this.reasonsForDeleteAccounts));
+        localStorage.setItem(
+          "reasonsForDeleteAccounts",
+          JSON.stringify(this.reasonsForDeleteAccounts)
+        );
 
         let users2 = localStorage.getItem("users");
         users2 = JSON.parse(users2);
-                        userSave = users2;
+        userSave = users2;
         console.log(users2);
-        let posUser = users2.findIndex(x=>x.id == id);
+        let posUser = users2.findIndex((x) => x.id == id);
         console.log(posUser);
         let userDelete = users2.splice(posUser, 1);
         console.log(userDelete);
         localStorage.setItem("users", JSON.stringify(users2));
 
-
         let userProvider2 = localStorage.getItem("userProviders");
         userProvider2 = JSON.parse(userProvider2);
-                        userProvSave = userProvider2;
+        userProvSave = userProvider2;
         console.log(userProvider2);
-        let posUserProvider = userProvider2.findIndex(x => x.id == id);
+        let posUserProvider = userProvider2.findIndex((x) => x.id == id);
         console.log(posUserProvider);
         let userProviderDelete = userProvider2.splice(posUserProvider, 1);
         console.log(userProviderDelete);
         localStorage.setItem("userProviders", JSON.stringify(userProvider2));
 
-        (userSave.length > users2 && userProvSave.length > userProvider2) ? this.dialog = true : this.dialog2 = true;
-
+        if(userSave.length > users2 && userProvSave.length > userProvider2) {
+          this.dialog = true;
+          this.$router.push("/");
+        } else {
+          this.dialog2 = true;
+        }
         /*Esta validacion de posUser == userProvider2 solo sirve en el local storage, no en ningun otro lado */
 
-        let posUser2 = users2.findIndex(x=>x.id == id);
+        let posUser2 = users2.findIndex((x) => x.id == id);
         console.log(posUser2);
-        let posUserProvider2 = userProvider2.findIndex(x => x.id == id);
+        let posUserProvider2 = userProvider2.findIndex((x) => x.id == id);
         console.log(posUserProvider2);
         /*if(posUser2 == -1 && posUserProvider2 == -1){
           localStorage.setItem("onlineUserProvider", {});
@@ -334,7 +345,6 @@ export default {
           //this.dialog = true;
         }*/
       }
-
     },
     sendInfo() {},
   },

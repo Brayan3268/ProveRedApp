@@ -1,7 +1,8 @@
 <template>
+  <!-- muestra los campos necesarios para la creación y activación de una cuenta de acceso de un usuario-->
   <div>
     <v-form ref="formRegister" v-model="formRegister" lazy-validation>
-      <!-- Se crea el form de usuario -->
+      <!-- Se crea el formulario de regsitro de usuario -->
 
       <v-text-field
         v-model="user.fullname"
@@ -69,6 +70,7 @@
       <v-btn class="mr-4" @click="createUser"> Registrarse </v-btn>
     </v-form>
 
+    <!-- Le informa al usuario de la omisión o error de un campo necesario para la realización del registro-->
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline"> Error </v-card-title>
@@ -91,7 +93,7 @@ export default {
     this.loadUsers();
   },
   data: () => ({
-    /*Reglas para los campos*/
+    /*Reglas para los campos requeridos en el formulario de registro*/
     valid: true,
     formRegister: null,
     name: "",
@@ -128,6 +130,7 @@ export default {
       }
       console.log(this.users);
     },
+    // Una vez validada la existencia ó no de un usuario, se realiza la creación o registro de un usuario nuevo
     createUser() {
       if (this.$refs.formRegister.validate() && this.formRegister) {
         let exist = this.users.find((x) => x.id == this.user.id);
@@ -140,7 +143,7 @@ export default {
             this.$router.push("/homeClient");
           }
         } else {
-          alert("La persona que intenda crear ya esta en la tabla");
+          alert("La persona que intenta crear ya esta en la tabla");
         }
       } else {
         this.dialog = true;

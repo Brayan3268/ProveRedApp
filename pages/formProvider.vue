@@ -59,6 +59,7 @@
       </v-btn>
     </v-form>
 
+    <!-- informa si existe o no un campo por llenar-->
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline"> Error </v-card-title>
@@ -119,6 +120,8 @@ export default {
   }),
 
   methods: {
+    //Carga la información del usuario anteriormente guardada en el registro 
+    //con el fin de completar la información restante necesaria para especificar un proveedor
     loadUsers() {
       let users = localStorage.getItem("users");
       if (users != null) {
@@ -135,6 +138,7 @@ export default {
     loadUser(user) {
       this.userProvider.id = user.id;
     },
+    //una vez completados todos los campos del formulario se verifica si el proveedor que se intenta crear existe, y continuamente se remite al home del proveedor
     finishFormProvider() {
       // this.userProvider.id = this.users[this.users.length - 1];
       if (this.$refs.formProvider.validate() && this.formProvider) {

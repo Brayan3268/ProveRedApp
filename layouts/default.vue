@@ -76,7 +76,7 @@ export default {
         {
           id: "06",
           title: "Nuevo servicio",
-          icon: "",
+          icon: "mdi-clipboard-account",
           route: "/myServiceNewsAndActives",
         },
       ],
@@ -89,5 +89,4 @@ export default {
     },
   },
 };
-/*  */
 </script>

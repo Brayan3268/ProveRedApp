@@ -1,5 +1,5 @@
 <template>
-  <!-- Login -->
+  <!-- muestra el Login que se debe completar como filtro de acceso a la cuenta -->
   <v-main>
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
@@ -37,6 +37,7 @@
   </v-main>
 </template>
 
+<!-- si el login verifica que la cuenta existe y corresponde a un cliente/proveedor, se redirige al home respectivo-->
 <script>
 import homeClientVue from "./homeClient.vue";
 export default {
@@ -106,6 +107,7 @@ export default {
 
       console.log(this.id, this.password);
     },
+    //Si el usuario no posee una cuenta se redirige al formulario de registro
     goToRegister() {
       this.$router.push("/register");
     },
