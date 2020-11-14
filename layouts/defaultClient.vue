@@ -84,6 +84,7 @@ export default {
   methods: {
     logout() {
       this.$router.push("/");
+       localStorage.setItem("onlineUserClient", {});
     },
   },
 };

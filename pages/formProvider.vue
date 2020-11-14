@@ -115,6 +115,7 @@ export default {
       id: null,
       nameCompany: null,
       typeProvider: null,
+      cellphoneNumber: null,
       serviceDescription: null,
     },
   }),
@@ -151,7 +152,8 @@ export default {
             "userProviders",
             JSON.stringify(this.userProviders)
           );
-          this.$router.push("/homeProvider");
+          alert("Proveedor registrado correctamete");
+          this.$router.push("/");
         } else {
           alert("La persona que intenda crear ya existe");
         }

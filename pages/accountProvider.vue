@@ -1,125 +1,148 @@
 <template>
 <!--permite visualizar los campos relacionados con el perfil del proveedor, subir o adjuntar multimedia relacionada, y asi mismo poder actualizarlo-->
   <div>
-    <v-container>
-      <h1>Cuenta del proveedor</h1>
+    <v-form ref="formEdit" v-model="formEdit" lazy-validation>
+      <v-container >
+        <h1>Cuenta del proveedor</h1>
 
-      <p>Subir documentos sobre mis servicios</p>
-      <!--Permite adjuntar archivos multimedia relacionados con el perfil del proveedor-->
-      <v-file-input
-        truncate-length="15"
-        label="Subir multimedia"
-      ></v-file-input>
+        <v-row>
+        <p>Subir documentos sobre mis servicios</p>
+        
+        <p
+        style="margin-left: 290px;">Adjuntar informacion</p>
+        </v-row>
 
-      <p>Adjuntar informacion</p>
-      <v-file-input
-        accept="image/png, image/jpeg, image/bmp"
-        label="Fotos del producto o servicio"
-        prepend-icon="mdi-camera"
-      ></v-file-input>
+        <v-row>
+        <v-file-input
+          truncate-length="15"
+          label="Subir multimedia"
+          style="width: 410px; height: 50px;"
+        ></v-file-input>
 
-      <v-btn @click="sendInfo">Subir informacion</v-btn>
-    </v-container>
+        <v-file-input
+          accept="image/png, image/jpeg, image/bmp"
+          label="Fotos del producto o servicio"
+          prepend-icon="mdi-camera"
+          style="width: 500px; height: 50px; margin-left: 40px;"
+        ></v-file-input>
+        </v-row>
+      
+        <v-btn @click="sendInfo()" style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary">Subir ambos archivos </v-btn>
+      </v-container>
 
-    <!--visualiza los datos pertenecientes a los campos del proveedor, con la posibilidad de editarlos-->
-    <v-container>
-      <v-text-field
-        v-model="userOnline.fullname"
-        :counter="40"
-        :rules="nameRules"
-        label="Nombre completo"
-        class="mt-md-6 px-md-6"
-        required
-      ></v-text-field>
+      <v-container style="margin-top: 50px">
+        <v-row>
+        <v-text-field
+          v-model="user.fullname"
+          :counter="40"
+          :rules="nameRules"
+          label="Nombre completo"
+          style="margin-left: 30px;"
+          required
+        ></v-text-field>
 
-      <v-text-field
-        v-model="userOnline.email"
-        :rules="emailRules"
-        label="E-mail"
-        class="px-md-6 mx-lg-auto"
-        required
-      ></v-text-field>
+        <v-text-field
+          v-model="user.email"
+          :rules="emailRules"
+          label="E-mail"
+          style="margin-left: 30px;"
+          required
+        ></v-text-field>
 
-      <v-text-field
-        v-model="userOnline.password"
-        :counter="10"
-        :rules="nameRules"
-        label="Contraseña"
-        class="px-md-6 mx-lg-auto"
-        required
-      ></v-text-field>
+        <v-text-field
+          v-model="user.password"
+          :counter="10"
+          :rules="nameRules"
+          label="Contraseña"
+          style="margin-left: 30px;"
+          required
+        ></v-text-field>
 
-      <v-select
-        v-model="userOnline.typeProvider"
-        :items="typeProviderSelect"
-        :rules="[(v) => !!v || 'Item is required']"
-        label="Tipo de proveedor"
-        class="px-md-6 mx-lg-auto"
-        required
-      ></v-select>
+        <v-text-field
+          v-model="user.cellphoneNumber"
+          :counter="10"
+          :rules="nameRules"
+          label="Numero de celular"
+          style="margin-left: 30px;"
+          required
+        ></v-text-field>
+        </v-row>
 
-      <v-select
-        v-model="userOnline.entity"
-        :items="entity"
-        :rules="[(v) => !!v || 'Item is required']"
-        label="Entidad"
-        class="px-md-6 mx-lg-auto"
-        required
-      ></v-select>
+        <v-row>
+        <v-select
+          v-model="user.typeProvider"
+          :items="typeProviderSelect"
+          :rules="[(v) => !!v || 'Item is required']"
+          label="Tipo de proveedor"
+          class="px-md-6 mx-lg-auto"
+          style="width: 300px; margin-left: 0px;"
+          required
+        ></v-select>
 
-      <v-text-field
-        v-model="userOnline.nameCompany"
-        :counter="40"
-        :rules="nameRules"
-        label="Nombre de la Empresa"
-        class="mt-md-6 px-md-6"
-        required
-      ></v-text-field>
+        <v-select
+          v-model="user.entity"
+          :items="entity"
+          :rules="[(v) => !!v || 'Item is required']"
+          label="Entidad"
+          class="px-md-0"
+          style="width: 80px; margin-left: 30px;" 
+          required
+        ></v-select>
 
-      <v-textarea
-        v-model="userOnline.serviceDescription"
-        :counter="300"
-        :rules="serviceRules"
-        class="px-md-6 mx-lg-auto"
-        label="Describa su servicio(s)"
-      ></v-textarea>
+        <v-text-field
+          v-model="user.nameCompany"
+          :counter="40"
+          :rules="nameRules"
+          label="Nombre de la Empresa"
+          style="width: 80px; margin-left: 30px;"
+          required
+        ></v-text-field>
+        </v-row>
 
-      <v-btn @click="editUser">Editar</v-btn>
-    </v-container>
+        <v-textarea
+          v-model="user.serviceDescription"
+          :counter="300"
+          :rules="serviceRules"
+          label="Describa su servicio(s)"
+          style="width: 1000px; margin-left: 12px;"
+        ></v-textarea>
 
-    <!--da paso a la eliminación de la cuenta de acceso creada, dejando como huella una razón de dicha acción a modo de retroalimentación-->
-    <v-container>
-      <h1>!ELIMINAR MI CUENTA¡</h1>
+        <v-btn style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary" @click="editUser()">Editar</v-btn>
+      </v-container>
+    </v-form>
 
-      <p>
-        En esta seccion podras eliminar tu cuenta de proveedor, nos borra la
-        sonrisa tu partida, así que antes te pedimos que nos cuentes porque te
-        vas y te deseamos el mejor de los viajes.
-      </p>
+    <v-form style="margin-top: 50px" ref="formDialog" v-model="formDialog" lazy-validation>
+      <v-container>
+        <h1>!ELIMINAR MI CUENTA¡</h1>
 
-      <v-text-field
-        v-model="reasonForDeleteAccount.id"
-        label="Cedula"
-        class="px-md-6 mx-lg-auto"
-        disabled
-        required
-      ></v-text-field>
+        <p style="width: 970px;">
+          En esta seccion podras eliminar tu cuenta de proveedor, nos borra la
+          sonrisa tu partida, así que antes te pedimos que nos cuentes porque te
+          vas y te deseamos el mejor de los viajes.
+        </p>
 
-      <v-textarea
-        v-model="reasonForDeleteAccount.reason"
-        :counter="300"
-        :rules="serviceRules"
-        class="mt-md-6 px-md-6"
-        label="Cuentanos tus motivos"
-      ></v-textarea>
+        <v-text-field
+          v-model="reasonForDeleteAccount.id"
+          label="Cedula"
+          style="width: 200px;"
+          disabled
+          required
+        ></v-text-field>
 
-      <v-btn class="mt-md-6 px-md-6" @click="deleteAccountProvider1()"
-        >Eliminar cuenta</v-btn
-      >
-    </v-container>
+        <v-textarea
+          v-model="reasonForDeleteAccount.reason"
+          :counter="300"
+          :rules="serviceRules"
+          style="width: 1000px;"
+          label="Cuentanos tus motivos"
+        ></v-textarea>
 
-    <!-- crea dialogos que dan cuenta de la correcta realización de la eliminación de una cuenta-->
-    <v-dialog v-model="dialog" max-width="290">
+        <v-btn style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" color="primary" @click="deleteAccountProvider1()"
+          >Eliminar cuenta</v-btn
+        >
+      </v-container>
+    </v-form>
+    <v-dialog v-model="dialog" max-width="290" persistent>
       <v-card>
         <v-card-title class="headline"> Eliminacion de cuenta </v-card-title>
 
@@ -128,12 +151,12 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+          <v-btn color="primary" text @click="goToMenu()"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
 
-    <v-dialog v-model="dialog2" max-width="290">
+    <v-dialog v-model="dialog2" max-width="290" persistent>
       <v-card>
         <v-card-title class="headline"> Eliminacion de cuenta </v-card-title>
 
@@ -145,7 +168,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog2 = false"> Close </v-btn>
+          <v-btn color="primary" text @click="dialog2 = false"> Close </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -159,14 +182,13 @@ export default {
     this.loadInfo();
     this.reasonForDeleteAccount.id = this.userOnline.id;
     this.loadUsers();
+    //console.log(this.userOnline);
   },
 
-  beforeUpdate() {
-    this.loadUsers();
-    this.loadInfo();
-  },
   data: () => ({
     /*Reglas para los campos*/
+    formEdit: null,
+    formDialog: null,
     nameRules: [
       (v) => !!v || "El campo es requerido",
       (v) => (v && v.length <= 40) || "",
@@ -174,35 +196,66 @@ export default {
     email: "",
     entity: ["Persona juridica", "Persona natural"],
     typeProviderSelect: ["Proveedor formal", "proveedor informal"],
+    nameRules: [
+      (v) => !!v || "El campo es requerido",
+      (v) => (v && v.length <= 40) || "",
+    ],
+
+    cellphoneNumber: [
+      (v) => !!v || "El campo es requerido",
+      (v) => (v && v.length == 10) || "",,
+    ],
 
     emailRules: [
       (v) => !!v || "E-mail es requerido",
-      (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+      (v) => /.+@.+\..+/.test(v) || "ingrese un E-mail valido",
     ],
     serviceRules: [
       (v) => !!v || "El campo es requerido",
       (v) => (v && v.length <= 300 && v.length > 10) || "",
     ],
 
-    dialog: null,
-    dialog2: null,
+    dialog: false,
+    dialog2: false,
 
     users: [],
     usersProviders: [],
-    user: {},
-    userProvider: {},
-    userOnline: {
+    temp: {
       fullname: null,
       id: null,
       email: null,
       password: null,
+      entity: null,
+      rol: null,
+      cellphoneNumber: null,
+    },
+    user: {
+      fullname: null,
+      id: null,
+      email: null,
+      password: null,
+      entity: null,
+      cellphoneNumber: null,
+      rol: null,
+    },
+    userProvider: {
+      id: null,
+      nameCompany: null,
       typeProvider: null,
-      roll: null,
+      serviceDescription: null,
+    },
+    userOnline: {
+      fullname: null,
+      cellphoneNumber: null,
+      id: null,
+      email: null,
+      password: null,
+      typeProvider: null,
+      rol: null,
       entity: null,
       nameCompany: null,
       serviceDescription: null,
     },
-
     users2: [],
     user2: {
       fullname: null,
@@ -211,6 +264,7 @@ export default {
       password: null,
       typeProvider: null,
       entity: null,
+      cellphoneNumber: null,
       companyName: null,
       serviceDescription: null,
     },
@@ -232,6 +286,7 @@ export default {
       nameCompany: null,
       typeProvider: null,
       serviceDescription: null,
+      cellphoneNumber: null,
     },
   }),
   methods: {
@@ -258,95 +313,127 @@ export default {
       this.users = JSON.parse(users);
       this.usersProviders = JSON.parse(usersProvider);
       this.userOnline = JSON.parse(onlineUserProvider);
+      this.user = this.userOnline;
     },
-    // permite editar la información del usuario validando en primera instancia si existe o no
+
     editUser() {
-      let user = this.users.find((x) => x.id == this.userOnline.id);
-      let userProvider = this.usersProviders.find(
-        (x) => x.id == this.userOnline.id
-      );
-
-      if (user != undefined && userProvider != undefined) {
-        let existIndex = this.users.findIndex(
+      if (this.$refs.formEdit.validate() && this.formEdit) {
+        let user = this.users.find((x) => x.id == this.userOnline.id);
+        let userProvider = this.usersProviders.find(
           (x) => x.id == this.userOnline.id
         );
-        let existIndexP = this.usersProviders.findIndex(
-          (x) => x.id == this.userOnline.id
-        );
-        this.user = user;
-        this.user.fullname = this.userOnline.fullname;
-        this.user.email = this.userOnline.email;
-        this.user.password = this.userOnline.password;
-        this.user.typeProvider = this.userOnline.typeProvider;
 
-        this.userProvider = userProvider;
-        this.userProvider.nameCompany = this.userOnline.nameCompany;
-        this.userProvider.typeProvider = this.userOnline.typeProvider;
-        this.userProvider.serviceDescription = this.userOnline.serviceDescription;
+        if (user != undefined && userProvider != undefined) {
+          let existIndex = this.users.findIndex(
+            (x) => x.id == this.userOnline.id
+          );
+          let existIndexP = this.usersProviders.findIndex(
+            (x) => x.id == this.userOnline.id
+          );
 
-        this.usersProviders.splice(existIndexP, 1, this.userProvider);
-        this.users.splice(existIndex, 1, this.user);
+          this.temp.id = this.user.id;
+          this.temp.cellphoneNumber = this.user.cellphoneNumber;
+          this.temp.fullname = this.user.fullname;
+          this.temp.email = this.user.email;
+          this.temp.password = this.user.password;
+          this.temp.entity = this.user.entity;
+          this.temp.rol = this.user.rol;
 
-        localStorage.setItem("users", JSON.stringify(this.users));
-        localStorage.setItem(
-          "userProviders",
-          JSON.stringify(this.usersProviders)
-        );
+          this.userProvider.id = this.user.id;
+          this.userProvider.cellphoneNumber = this.user.cellphoneNumber;
+          this.userProvider.nameCompany = this.user.nameCompany;
+          this.userProvider.typeProvider = this.user.typeProvider;
+          this.userProvider.serviceDescription = this.user.serviceDescription;
+
+          this.userOnline.id = this.user.id;
+          this.userOnline.fullname = this.user.fullname;
+          this.userOnline.email = this.user.email;
+          this.userOnline.cellphoneNumber = this.user.cellphoneNumber;
+          this.userOnline.password = this.user.password;
+          this.userOnline.entity = this.user.entity;
+          this.userOnline.rol = this.user.rol;
+          this.userOnline.nameCompany = this.user.nameCompany;
+          this.userOnline.typeProvider = this.user.typeProvider;
+          this.userOnline.serviceDescription = this.user.serviceDescription;
+
+          this.usersProviders.splice(existIndexP, 1, this.userProvider);
+          this.users.splice(existIndex, 1, this.temp);
+
+          localStorage.setItem("users", JSON.stringify(this.users));
+          localStorage.setItem(
+            "userProviders",
+            JSON.stringify(this.usersProviders)
+          );
+          localStorage.setItem(
+            "onlineUserProvider",
+            JSON.stringify(this.userOnline)
+          );
+          alert("Se edito correctamente");
+        }
+      } else {
+        alert("ingrese todos los campos");
       }
     },
     // elimina la cuenta del proveedor, guardando su razón para eliminar la cuenta
     deleteAccountProvider1() {
-      debugger
-      let id = this.reasonForDeleteAccount.id;
-      let userProvSave = null;
-      let userSave = null;
-      if (id.length >= 1) {
-        this.reasonsForDeleteAccounts.push(this.reasonForDeleteAccount);
-        localStorage.setItem(
-          "reasonsForDeleteAccounts",
-          JSON.stringify(this.reasonsForDeleteAccounts)
-        );
 
-        let users2 = localStorage.getItem("users");
-        users2 = JSON.parse(users2);
-        userSave = users2;
-        console.log(users2);
-        let posUser = users2.findIndex((x) => x.id == id);
-        console.log(posUser);
-        let userDelete = users2.splice(posUser, 1);
-        console.log(userDelete);
-        localStorage.setItem("users", JSON.stringify(users2));
+      /**Eliminar los servicios del proveedor al eliminar el proveedor*/
 
-        let userProvider2 = localStorage.getItem("userProviders");
-        userProvider2 = JSON.parse(userProvider2);
-        userProvSave = userProvider2;
-        console.log(userProvider2);
-        let posUserProvider = userProvider2.findIndex((x) => x.id == id);
-        console.log(posUserProvider);
-        let userProviderDelete = userProvider2.splice(posUserProvider, 1);
-        console.log(userProviderDelete);
-        localStorage.setItem("userProviders", JSON.stringify(userProvider2));
+      if (this.$refs.formDialog.validate() && this.formDialog) {
+        let id = this.reasonForDeleteAccount.id;
+        let userProvSave = null;
+        let userSave = null;
+        if (id.length >= 1) {
+          this.reasonsForDeleteAccounts.push(this.reasonForDeleteAccount);
+          localStorage.setItem(
+            "reasonsForDeleteAccounts",
+            JSON.stringify(this.reasonsForDeleteAccounts)
+          );
 
-        if(userSave.length > users2 && userProvSave.length > userProvider2) {
-          this.dialog = true;
-          this.$router.push("/");
-        } else {
-          this.dialog2 = true;
-        }
-        /*Esta validacion de posUser == userProvider2 solo sirve en el local storage, no en ningun otro lado */
+          let users2 = localStorage.getItem("users");
+          users2 = JSON.parse(users2);
+          userSave = users2;
+          console.log(users2);
+          let posUser = users2.findIndex((x) => x.id == id);
+          console.log(posUser);
+          let userDelete = users2.splice(posUser, 1);
+          console.log(userDelete);
+          localStorage.setItem("users", JSON.stringify(users2));
 
-        let posUser2 = users2.findIndex((x) => x.id == id);
-        console.log(posUser2);
-        let posUserProvider2 = userProvider2.findIndex((x) => x.id == id);
-        console.log(posUserProvider2);
-        /*if(posUser2 == -1 && posUserProvider2 == -1){
+          let userProvider2 = localStorage.getItem("userProviders");
+          userProvider2 = JSON.parse(userProvider2);
+          userProvSave = userProvider2;
+          console.log(userProvider2);
+          let posUserProvider = userProvider2.findIndex((x) => x.id == id);
+          console.log(posUserProvider);
+          let userProviderDelete = userProvider2.splice(posUserProvider, 1);
+          console.log(userProviderDelete);
+          localStorage.setItem("userProviders", JSON.stringify(userProvider2));
+
+          if (userSave.length > users2 && userProvSave.length > userProvider2) {
+            this.dialog2 = true;
+          } else {
+            this.dialog = true;
+          }
+          /*Esta validacion de posUser == userProvider2 solo sirve en el local storage, no en ningun otro lado */
+
+          let posUser2 = users2.findIndex((x) => x.id == id);
+          console.log(posUser2);
+          let posUserProvider2 = userProvider2.findIndex((x) => x.id == id);
+          console.log(posUserProvider2);
+          /*if(posUser2 == -1 && posUserProvider2 == -1){
           localStorage.setItem("onlineUserProvider", {});
           this.$router.push("/");
           //this.dialog = true;
         }*/
+        }
       }
     },
     sendInfo() {},
+    goToMenu() {
+      this.$router.push("/");
+      localStorage.setItem("onlineUserProvider", {});
+    },
   },
 };
 </script>

@@ -18,7 +18,7 @@
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
-        input
+        input type="number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>
@@ -37,6 +37,15 @@
         :rules="nameRules"
         label="Contraseña"
         type="password"
+        class="px-md-6 mx-lg-auto"
+        required
+      ></v-text-field>
+
+      <v-text-field
+        v-model="user.cellphoneNumber"
+        :rules="cellphoneNumber"
+        label="Numero de celular"
+        type="number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>
@@ -80,7 +89,7 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-btn color="accent" text @click="dialog = false"> Close </v-btn>
+          <v-btn color="accent" text @click="dialog = false"> Cerrar </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -101,6 +110,10 @@ export default {
       (v) => !!v || "El campo es requerido",
       (v) => (v && v.length <= 40) || "",
     ],
+    cellphoneNumber: [
+      (v) => !!v || "El campo es requerido",
+      (v) => (v && v.length == 10) || "",,
+    ],
     email: "",
     emailRules: [
       (v) => !!v || "E-mail es requerido",
@@ -116,6 +129,7 @@ export default {
       id: null,
       email: null,
       password: null,
+      cellphoneNumber: null,
       entity: null,
       rol: null,
     },
@@ -138,12 +152,14 @@ export default {
           this.users.push(this.user);
           localStorage.setItem("users", JSON.stringify(this.users));
           if (this.user.rol == "Proveedor") {
+            alert("Proveedor en proceso de registro");
             this.$router.push("/formProvider");
           } else {
-            this.$router.push("/homeClient");
+            alert("Cliente registrado correctamete");
+            this.$router.push("/");
           }
         } else {
-          alert("La persona que intenta crear ya esta en la tabla");
+          alert("La persona que intenda crear ya tiene una cuenta");
         }
       } else {
         this.dialog = true;

@@ -20,6 +20,8 @@ export default {
     "@nuxtjs/vuetify",
   ],
 
+  modules: ['@nuxtjs/axios'],
+
   // Configuración del vuetify
   vuetify: {
     theme: {

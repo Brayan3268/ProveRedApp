@@ -57,6 +57,7 @@ export default {
       id: null,
       email: null,
       password: null,
+      cellphoneNumber: null,
       entity: null,
       rol: null,
       nameCompany: null,
@@ -96,6 +97,11 @@ export default {
             );
             this.$router.push("/homeProvider");
           } else {
+            this.onlineUserClient = user;
+            localStorage.setItem(
+              "onlineUserClient",
+              JSON.stringify(this.onlineUserClient)
+            );
             this.$router.push("/homeClient");
           }
         } else {
