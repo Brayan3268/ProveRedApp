@@ -57,7 +57,7 @@ export default {
       entity: null,
       rol: null,
       nameCompany: null,
-      typeProvider: null,
+      typeprovider: null,
       serviceDescription: null,
       averagepunctuation: null,
     },
@@ -100,7 +100,7 @@ export default {
           let userProvider = res.data.info[0];
           console.log("userProvider ", userProvider);
           this.onlineUserProvider.nameCompany = userProvider.companyname;
-          this.onlineUserProvider.typeProvider = userProvider.typeprovider;
+          this.onlineUserProvider.typeprovider = userProvider.typeprovider;
           this.onlineUserProvider.serviceDescription =
             userProvider.servicedescription;
           this.onlineUserProvider.averagepunctuation =
@@ -122,7 +122,7 @@ export default {
             let userProvider = this.userProviders.find((x) => x.id == this.id);
             this.onlineUserProvider = user;
             this.onlineUserProvider.nameCompany = userProvider.nameCompany;
-            this.onlineUserProvider.typeProvider = userProvider.typeProvider;
+            this.onlineUserProvider.typeprovider = userProvider.typeprovider;
             this.onlineUserProvider.serviceDescription =
               userProvider.serviceDescription;
             console.log(this.onlineUserProvider);

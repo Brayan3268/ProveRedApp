@@ -151,7 +151,6 @@ export default {
         this.$axios
           .post(url, data)
           .then((res) => {
-            //console.log("Usuario ", res);
             if (this.user.rol == "Proveedor") {
               alert("Proveedor en proceso de registro");
               sessionStorage.setItem("idProvider", this.user.id);
@@ -161,7 +160,6 @@ export default {
             }
           })
           .catch((err) => {
-            //console.log(err);
             alert(err);
           });
       } else {
@@ -183,9 +181,7 @@ export default {
         })
         .catch((err) => {
           console.error(err);
-        });
-
-      
+        });      
     },
 
     
