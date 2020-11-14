@@ -7,10 +7,12 @@
         type = "number"
         style="width: 390px;"
         required
+        v-if="disabled"
     ></v-text-field>
 
     <v-btn 
-      color="primary" 
+      color="primary"
+      v-if="disabled"
       style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" 
       @click="searchContractInProcess()">
       Buscar
@@ -171,6 +173,7 @@ export default {
   },
   data: () => ({
     //class="mt-md-6 px-md-6"
+    desabled: false,
     contracts: [],
     contract: {
         idContract: null,
@@ -225,9 +228,11 @@ methods: {
         //debugger
         let contracts = localStorage.getItem("contracts");
         if (contracts != null) { 
-            this.contracts = JSON.parse(contracts);   
+            this.contracts = JSON.parse(contracts);
+            this.desabled = false; 
         }else{
             this.dialog = true;
+            this.desabled = true;
         }
     },
     searchContractInProcess(){
