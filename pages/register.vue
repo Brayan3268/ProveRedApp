@@ -18,7 +18,8 @@
         :counter="40"
         :rules="nameRules"
         label="Documento de identidad"
-        input type="number"
+        input
+        type="number"
         class="px-md-6 mx-lg-auto"
         required
       ></v-text-field>
@@ -99,7 +100,7 @@
 export default {
   layout: "blank",
   beforeMount() {
-    this.loadUsers();
+    //this.loadUsers();
   },
   data: () => ({
     /*Reglas para los campos requeridos en el formulario de registro*/
@@ -112,7 +113,7 @@ export default {
     ],
     cellphoneNumber: [
       (v) => !!v || "El campo es requerido",
-      (v) => (v && v.length == 10) || "",,
+      (v) => (v && v.length == 10) || "",
     ],
     email: "",
     emailRules: [
@@ -147,25 +148,46 @@ export default {
     // Una vez validada la existencia ó no de un usuario, se realiza la creación o registro de un usuario nuevo
     createUser() {
       if (this.$refs.formRegister.validate() && this.formRegister) {
-        let exist = this.users.find((x) => x.id == this.user.id);
-        if (exist == undefined) {
-          this.users.push(this.user);
-          localStorage.setItem("users", JSON.stringify(this.users));
-          if (this.user.rol == "Proveedor") {
-            alert("Proveedor en proceso de registro");
-            this.$router.push("/formProvider");
-          } else {
-            alert("Cliente registrado correctamete");
-            this.$router.push("/");
-          }
-        } else {
-          alert("La persona que intenda crear ya tiene una cuenta");
-        }
+        const url = "http://localhost:3001/api/v2/users";
+        let data = {};
+        data = this.user;
+        this.$axios
+          .post(url, data)
+          .then((res) => {
+            if (this.user.rol == "Proveedor") {
+              alert("Proveedor en proceso de registro");
+              sessionStorage.setItem("idProvider", this.user.id);
+              this.$router.push("/formProvider");
+            } else {
+              this.createClient();
+            }
+          })
+          .catch((err) => {
+            alert(err);
+          });
       } else {
         this.dialog = true;
       }
-      console.log(this.users);
     },
+
+    createClient() {
+      const url = "http://localhost:3001/api/v2/clients";
+      let data = {};
+      data.idClient = this.user.id;
+      data.idUser = this.user.id;
+      this.$axios
+        .post(url, data)
+        .then((res) => {
+          console.log(res);
+          alert("Cliente registrado correctamete");
+          this.$router.push("/");
+        })
+        .catch((err) => {
+          console.error(err);
+        });      
+    },
+
+    
   },
 };
 </script>

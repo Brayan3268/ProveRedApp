@@ -1,3 +1,8 @@
+<!--
+import time
+import datetime
+-->
+
 <template>
 <!-- permite crear un nuevo servicio del proveedor especificando sus diferentes campos o atributos, y activarlo-->
   <div>
@@ -76,6 +81,8 @@ export default {
   beforeMount() {
     this.loadInfo();
     console.log(this.services);
+    console.log(this.onlineUserProvider);
+
   },
   beforeUpdate() {
     //window.location.reload();
@@ -96,11 +103,12 @@ export default {
     ],
     onlineUserProvider: {},
     service: {
-      id: null,
-      idService: null,
-      initDate: null,
-      finDate: null,
+      idservice: null,
+      idprovider: null,
       description: null,
+      initdate: null,
+      findate: null,
+      state: null,
       total: null,
     },
     services: [],
@@ -118,36 +126,45 @@ export default {
         this.onlineUserProvider = JSON.parse(onlineUserProvider);
       }
 
-      let services = localStorage.getItem("services");
+      //Hay que hacer el get de los servicios, aunque no veo para que es util
+      /*let services = localStorage.getItem("services");
       if (services != null) {
         this.services = JSON.parse(services);
-      }
+      }*/
     },
     /// Crea un nuevo servicio una vez verificados todas las reglas de los campos del formulario, y lo guarda en el arreglo de servicios
     createService() {
       if (this.$refs.formService.validate() && this.formService) {
-        this.service.id = this.onlineUserProvider.id;
-        this.service.initDate = this.dates[0];
-        this.service.finDate = this.dates[this.dates.length - 1];
-
-        if (this.services.length != 0) {
-          for (var i = 0; i < this.services.length; i++) {
-            if (this.services.length - 1 == i) {
-              this.service.idService = i + 2;
-            }
-          }
-        } else {
-          this.service.idService = 1;
-        }
-
-        this.services.push(this.service);
-
-        localStorage.setItem("services", JSON.stringify(this.services));
-        this.service = {};
-        this.dialogCreateService = true;
+        debugger
+        const url = "http://localhost:3001/api/v2/services";
+        let data = {};
+        this.service.initdate = this.dates[0];
+        //this.service.initdate = "2020/05/13:000000";
+        console.log(this.service.initdate);
+        this.service.findate = this.dates[this.dates.length - 1];
+        //this.service.findate = "2020/05/13:000000";
+        console.log(this.service.findate);
+        this.service.state = "En proceso";
+        this.service.idprovider = this.onlineUserProvider.iduser;
+        data = this.service;
+        console.log(data);
+        let token = localStorage.getItem("token");
+        this.$axios.setToken(token, "Bearer");
+        this.$axios
+          .post(url, data)
+          .then((res) => {
+            console.log(res);
+            //alert("Servicio registrado correctamete");
+            this.dialogCreateService = true;
+          })
+          .catch((err) => {
+            alert("Servicio no se pudo registrar correctamete");
+            console.error(err);
+          });
       } else {
         this.dialog = true;
       }
+
     },
   },
 };

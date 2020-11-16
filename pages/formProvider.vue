@@ -124,16 +124,17 @@ export default {
     //Carga la información del usuario anteriormente guardada en el registro 
     //con el fin de completar la información restante necesaria para especificar un proveedor
     loadUsers() {
-      let users = localStorage.getItem("users");
-      if (users != null) {
-        this.users = JSON.parse(users);
-      }
-      console.log(this.users);
+      
+      // let users = localStorage.getItem("users");
+      // if (users != null) {
+      //   this.users = JSON.parse(users);
+      // }
+      // console.log(this.users);
 
-      let userProviders = localStorage.getItem("userProviders");
-      if (userProviders != null) {
-        this.userProviders = JSON.parse(userProviders);
-      }
+      // let userProviders = localStorage.getItem("userProviders");
+      // if (userProviders != null) {
+      //   this.userProviders = JSON.parse(userProviders);
+      // }
     },
 
     loadUser(user) {
