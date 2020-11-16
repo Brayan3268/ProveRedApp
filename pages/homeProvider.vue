@@ -14,8 +14,8 @@ export default {
   },
   methods: {
     loadPage() {
-      let token = localStorage.getItem("token");
-      this.$axios.setToken(token, "Bearer");
+      // let token = localStorage.getItem("token");
+      // this.$axios.setToken(token, "Bearer");
     },
   },
 };

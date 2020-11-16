@@ -80,9 +80,7 @@ export default {
   beforeMount() {
     this.loadUser();
   },
-  beforeUpdate() {
-    this.loadUsers();
-  },
+
   data: () => ({
     /*Reglas para los campos*/
     valid: true,
@@ -100,8 +98,6 @@ export default {
     checkbox: false,
     formProvider: null,
     dialog: false,
-    users: [],
-    userProviders: [],
     userProvider: {
       /*Estos datos deberan ser almacenados en la bd junto con los nuevos datos que se adquieren en esta pagina*/
       /*fullname: null,
@@ -132,7 +128,8 @@ export default {
         data.companyName = this.userProvider.nameCompany;
         data.typeProvider = this.userProvider.typeProvider;
         data.serviceDescription = this.userProvider.serviceDescription;
-        axios
+        //data.averagePunctuation = 0/null;
+        this.$axios
           .post(url, data)
           .then((res) => {
             console.log(res);

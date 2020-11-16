@@ -68,8 +68,6 @@ export default {
       let user = {};
       let userProvider = {};
       const url = "http://localhost:3001/users/" + id;
-      let token = localStorage.getItem("token");
-      this.$axios.setToken(token, "Bearer");
       this.$axios
         .get(url)
         .then((res) => {

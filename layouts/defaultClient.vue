@@ -43,6 +43,9 @@
 </template>
 <script>
 export default {
+  beforeMount() {
+    this.token();
+  },
   data() {
     return {
       drawer: null,
@@ -84,7 +87,11 @@ export default {
   methods: {
     logout() {
       this.$router.push("/");
-       localStorage.setItem("onlineUserClient", {});
+      localStorage.setItem("onlineUserClient", {});
+    },
+    token() {
+      let token = localStorage.getItem("token");
+      this.$axios.setToken(token, "Bearer");
     },
   },
 };

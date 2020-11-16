@@ -14,23 +14,33 @@ import datetime
         label="Describa su servicio(s)"
       >
       </v-textarea>
-      <p style="margin-left: 23px;">Fecha de inicio y finalizacion del servicio</p>
-      <p style="margin-left: 23px; width: 290px;">Seleccione la fecha de inicio y luego la de finalizacion del evento</p>
-      
-      <v-row style=" width: 900px;">
+      <p style="margin-left: 23px">
+        Fecha de inicio y finalizacion del servicio
+      </p>
+      <p style="margin-left: 23px; width: 290px">
+        Seleccione la fecha de inicio y luego la de finalizacion del evento
+      </p>
+
+      <v-row style="width: 900px">
         <!-- <v-col cols="12" sm="6"> -->
-          <v-date-picker v-model="dates" style="margin-left: 32px" range locale="es-CO"> </v-date-picker>
+        <v-date-picker
+          v-model="dates"
+          style="margin-left: 32px"
+          range
+          locale="es-CO"
+        >
+        </v-date-picker>
         <!-- </v-col> -->
         <!-- <v-col cols="12" sm="6"> -->
-          <v-text-field
-            v-model="dateRangeText"
-            label="Fecha Inicio - Fecha Finalizacion"
-            prepend-icon="mdi-calendar"
-            style=" width: 0px; margin-left: 100px"
-            :rules="nameRules"
-            readonly
-          ></v-text-field>
-          <!-- model: {{ dates }} -->
+        <v-text-field
+          v-model="dateRangeText"
+          label="Fecha Inicio - Fecha Finalizacion"
+          prepend-icon="mdi-calendar"
+          style="width: 0px; margin-left: 100px"
+          :rules="nameRules"
+          readonly
+        ></v-text-field>
+        <!-- model: {{ dates }} -->
         <!-- </v-col> -->
       </v-row>
       <v-text-field
@@ -70,7 +80,12 @@ import datetime
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-btn @click="createService()" style="width: 300px; height: 40px; margin-left: 20px; margin-top: 16px" color="primary">Nuevo servicio</v-btn>
+    <v-btn
+      @click="createService()"
+      style="width: 300px; height: 40px; margin-left: 20px; margin-top: 16px"
+      color="primary"
+      >Nuevo servicio</v-btn
+    >
   </div>
 </template>
 <script>
@@ -79,7 +94,6 @@ export default {
     this.loadInfo();
     console.log(this.services);
     console.log(this.onlineUserProvider);
-
   },
   beforeUpdate() {
     //window.location.reload();
@@ -130,21 +144,20 @@ export default {
 
     createService() {
       if (this.$refs.formService.validate() && this.formService) {
-        debugger
         const url = "http://localhost:3001/api/v2/services";
         let data = {};
         this.service.initdate = this.dates[0];
-        //this.service.initdate = "2020/05/13:000000";
+
         console.log(this.service.initdate);
         this.service.findate = this.dates[this.dates.length - 1];
-        //this.service.findate = "2020/05/13:000000";
+
         console.log(this.service.findate);
         this.service.state = "En proceso";
         this.service.idprovider = this.onlineUserProvider.iduser;
         data = this.service;
         console.log(data);
-        let token = localStorage.getItem("token");
-        this.$axios.setToken(token, "Bearer");
+        // let token = localStorage.getItem("token");
+        // this.$axios.setToken(token, "Bearer");
         this.$axios
           .post(url, data)
           .then((res) => {
@@ -159,7 +172,6 @@ export default {
       } else {
         this.dialog = true;
       }
-
     },
   },
 };
