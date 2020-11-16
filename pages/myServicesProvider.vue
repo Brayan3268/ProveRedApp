@@ -5,39 +5,37 @@
       <h1>Mis servicios activos</h1>
 
       <v-row>
-        
-      <v-text-field
-        v-model="servicesOnlineUserProvider.id"
-        label="Cedula"
-        class="mt-md-6 px-md-6"
-        disabled
-      ></v-text-field>
+        <v-text-field
+          v-model="servicesOnlineUserProvider.id"
+          label="Cedula"
+          class="mt-md-6 px-md-6"
+          disabled
+        ></v-text-field>
 
-      <v-text-field
-        v-model="servicesOnlineUserProvider.idService"
-        label="ID del servicio"
-        class="mt-md-6 px-md-6"
-        disabled
-      ></v-text-field>
+        <v-text-field
+          v-model="servicesOnlineUserProvider.idService"
+          label="ID del servicio"
+          class="mt-md-6 px-md-6"
+          disabled
+        ></v-text-field>
 
-      <v-text-field
-        v-model="servicesOnlineUserProvider.initDate"
-        label="Fecha de incio del evento"
-        class="mt-md-6 px-md-6"
-        type="date"
-        required
-        :rules="nameRules"
-      ></v-text-field>
+        <v-text-field
+          v-model="servicesOnlineUserProvider.initDate"
+          label="Fecha de incio del evento"
+          class="mt-md-6 px-md-6"
+          type="date"
+          required
+          :rules="nameRules"
+        ></v-text-field>
 
-      <v-text-field
-        v-model="servicesOnlineUserProvider.finDate"
-        label="Fecha final del evento"
-        class="mt-md-6 px-md-6"
-        type="date"
-        required
-        :rules="nameRules"
-      ></v-text-field>
-
+        <v-text-field
+          v-model="servicesOnlineUserProvider.finDate"
+          label="Fecha final del evento"
+          class="mt-md-6 px-md-6"
+          type="date"
+          required
+          :rules="nameRules"
+        ></v-text-field>
       </v-row>
 
       <v-textarea
@@ -88,7 +86,9 @@
             <v-card-title class="headline">
               Eliminacion de servicio</v-card-title
             >
-            <v-card-text> ¿Seguro que quieres eliminar este servicio?</v-card-text>
+            <v-card-text>
+              ¿Seguro que quieres eliminar este servicio?</v-card-text
+            >
 
             <v-card-actions>
               <v-spacer></v-spacer>
@@ -145,10 +145,10 @@ export default {
       dialog: false,
       dialogD: false,
       headers: [
-        { text: "Cedula", value: "id" },
-        { text: "ID del servicio", value: "idService" },
-        { text: "Fecha de inicio", value: "initDate" },
-        { text: "Fecha de finalizacion", value: "finDate" },
+        //{ text: "Cedula", value: "iduser" },
+        { text: "ID del servicio", value: "idservice" },
+        { text: "Fecha de inicio", value: "initdate" },
+        { text: "Fecha de finalizacion", value: "findate" },
         { text: "Descripcion", value: "description" },
         { text: "Valor total", value: "total" },
         { text: "Actions", value: "actions" },
@@ -158,24 +158,22 @@ export default {
 
       servicesOnlineUserProviders: [],
       servicesOnlineUserProvider: {
-        id: null,
-        idService: null,
-        initDate: null,
-        finDate: null,
+        iduser: null,
+        idservice: null,
+        initdate: null,
+        findate: null,
         description: null,
         total: null,
-        
       },
 
       services: [],
       service: {
-        id: null,
+        iduser: null,
         idService: null,
         initDate: null,
         finDate: null,
         description: null,
         total: null,
-        
       },
 
       //Indica si esta en un proceso de edicion o no
@@ -190,23 +188,35 @@ export default {
   methods: {
     //Carga y muestra la pagina con los servicios del proveedor 
     loadPage() {
-      let services = localStorage.getItem("services");
-
-      if (services != null) {
-        this.services = JSON.parse(services);
-      }
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
-      if (onlineUserProvider != null) {
-        this.onlineUserProvider = JSON.parse(onlineUserProvider);
-      }
+      this.onlineUserProvider = JSON.parse(onlineUserProvider);
 
-      for (var i = 0; i < this.services.length; i++) {
-        if (this.services[i].id == this.onlineUserProvider.id) {
-          this.servicesOnlineUserProviders.push(this.services[i]);
-        }
-      }
+      const url =
+        "http://localhost:3001/api/v2/services/" +
+        this.onlineUserProvider.iduser;
+      this.$axios
+        .get(url)
+        .then((res) => {
+          console.log(res.data.info);
+          this.servicesOnlineUserProviders = res.data.info;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
 
-      console.log(this.servicesOnlineUserProviders);
+      // let services = localStorage.getItem("services");
+
+      // if (services != null) {
+      //   this.services = JSON.parse(services);
+      // }
+
+      // for (var i = 0; i < this.services.length; i++) {
+      //   if (this.services[i].id == this.onlineUserProvider.id) {
+      //     this.servicesOnlineUserProviders.push(this.services[i]);
+      //   }
+      // }
+
+      // console.log(this.servicesOnlineUserProviders);
     },
     loadService(service) {
       this.servicesOnlineUserProvider = service;

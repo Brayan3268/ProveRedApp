@@ -79,13 +79,9 @@
 export default {
   layout: "blank",
   beforeMount() {
-    this.loadUsers();
-    this.loadUser(this.users[this.users.length - 1]);
-    console.log(this.users);
+    this.loadUser();
   },
-  beforeUpdate() {
-    this.loadUsers();
-  },
+
   data: () => ({
     /*Reglas para los campos*/
     valid: true,
@@ -103,8 +99,6 @@ export default {
     checkbox: false,
     formProvider: null,
     dialog: false,
-    users: [],
-    userProviders: [],
     userProvider: {
       /*Estos datos deberan ser almacenados en la bd junto con los nuevos datos que se adquieren en esta pagina*/
       /*fullname: null,
@@ -121,43 +115,33 @@ export default {
   }),
 
   methods: {
-    //Carga la información del usuario anteriormente guardada en el registro 
-    //con el fin de completar la información restante necesaria para especificar un proveedor
-    loadUsers() {
-      
-      // let users = localStorage.getItem("users");
-      // if (users != null) {
-      //   this.users = JSON.parse(users);
-      // }
-      // console.log(this.users);
-
-      // let userProviders = localStorage.getItem("userProviders");
-      // if (userProviders != null) {
-      //   this.userProviders = JSON.parse(userProviders);
-      // }
-    },
-
-    loadUser(user) {
-      this.userProvider.id = user.id;
+    loadUser() {
+      let id = sessionStorage.getItem("idProvider");
+      this.userProvider.id = id;
     },
     //una vez completados todos los campos del formulario se verifica si el proveedor que se intenta crear existe, y continuamente se remite al home del proveedor
     finishFormProvider() {
       // this.userProvider.id = this.users[this.users.length - 1];
       if (this.$refs.formProvider.validate() && this.formProvider) {
-        let exist = this.userProviders.find(
-          (x) => x.id == this.userProvider.id
-        );
-        if (exist == undefined) {
-          this.userProviders.push(this.userProvider);
-          localStorage.setItem(
-            "userProviders",
-            JSON.stringify(this.userProviders)
-          );
-          alert("Proveedor registrado correctamete");
-          this.$router.push("/");
-        } else {
-          alert("La persona que intenda crear ya existe");
-        }
+        const url = "http://localhost:3001/api/v2/providers";
+        let data = {};
+
+        data.idUser = this.userProvider.id;
+        data.companyName = this.userProvider.nameCompany;
+        data.typeProvider = this.userProvider.typeProvider;
+        data.serviceDescription = this.userProvider.serviceDescription;
+        //data.averagePunctuation = 0/null;
+        this.$axios
+          .post(url, data)
+          .then((res) => {
+            console.log(res);
+            alert("Proveedor registrado correctamete");
+            this.$router.push("/");
+          })
+          .catch((err) => {
+            console.error(err);
+            alert("La persona que intenda crear ya existe");
+          });
       } else {
         this.dialog = true;
       }

@@ -163,7 +163,8 @@ export default {
             }
           })
           .catch((err) => {
-            alert(err);
+            //alert(err.message);
+            alert("Error en la creacion del usurio");
           });
       } else {
         this.dialog = true;
@@ -184,10 +185,8 @@ export default {
         })
         .catch((err) => {
           console.error(err);
-        });      
+        });
     },
-
-    
   },
 };
 </script>
