@@ -157,7 +157,7 @@ export default {
         this.service.findate = this.dates[this.dates.length - 1];
 
         console.log(this.service.findate);
-        this.service.state = "En proceso";
+        this.service.state = "En espera";
         this.service.idprovider = this.onlineUserProvider.iduser;
         data = this.service;
         console.log(data);

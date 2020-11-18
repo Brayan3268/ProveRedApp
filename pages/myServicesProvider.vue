@@ -26,6 +26,7 @@
           type="date"
           required
           :rules="nameRules"
+          v-if="editing"
         ></v-text-field>
 
         <v-text-field
@@ -35,6 +36,7 @@
           type="date"
           required
           :rules="nameRules"
+          v-if="editing"
         ></v-text-field>
       </v-row>
 
@@ -45,6 +47,7 @@
         style="width: 1000px; margin-left: 12px"
         required
         :rules="nameRules"
+        v-if="editing"
       ></v-textarea>
 
       <v-text-field
@@ -54,6 +57,7 @@
         style="width: 200px; margin-left: 12px"
         required
         :rules="nameRules"
+        v-if="editing"
       ></v-text-field>
 
       <v-col cols="12" md="4">
@@ -204,19 +208,6 @@ export default {
           console.error(err);
         });
 
-      // let services = localStorage.getItem("services");
-
-      // if (services != null) {
-      //   this.services = JSON.parse(services);
-      // }
-
-      // for (var i = 0; i < this.services.length; i++) {
-      //   if (this.services[i].id == this.onlineUserProvider.id) {
-      //     this.servicesOnlineUserProviders.push(this.services[i]);
-      //   }
-      // }
-
-      // console.log(this.servicesOnlineUserProviders);
     },
     loadService(service) {
       this.servicesOnlineUserProvider = service;
@@ -230,6 +221,7 @@ export default {
         console.log(editedService);
         let idEditedService = editedService.idService;
         console.log(idEditedService);
+        this.dontClicked = false;
         for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
           if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
             this.servicesOnlineUserProvider[i] = editedService;

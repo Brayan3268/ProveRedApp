@@ -1,9 +1,10 @@
 <template>
-<div style="width: 30; ">
-    <v-container v-if="!isInProcessContract" style="width: 30;">
-    <v-text-field 
-        v-model="contract.idContract"
-        label="ID del contrato"
+
+  <div style="width: 30; ">
+    <v-container>
+      <v-text-field 
+        v-model="idSelected"
+        label="ID del servicio"
         type = "number"
         style="width: 390px;"
         required
@@ -14,9 +15,44 @@
       color="primary"
       v-if="disabled"
       style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px" 
-      @click="searchContractInProcess()">
-      Buscar
+      @click="selectContractInProcess()">
+      Seleccionar
     </v-btn>
+    </v-container>
+
+    <v-container v-if="!isInProcessContract" style="width: 30;">
+      <div>
+      <v-data-table
+        :headers="headers"
+        :items="services"
+        :items-per-page="10"
+        class="elevation-1"
+      >
+      <template v-slot:[`item.actions`]="{ item }">
+        <v-icon @click="getService(item)"> mdi-file-send </v-icon>
+      </template>
+      </v-data-table>
+      <!--Se muestra el dialogo con las opciones de contacto para con el proveedor-->
+      <v-dialog v-model="dialogContact" max-width="600px">
+        <v-card>
+          <v-card-title class="headline"
+            >Que opcion de contactos desea usar</v-card-title
+          >
+          <v-card-actions>
+            
+          <v-spacer></v-spacer>
+          <v-row>
+            <v-col cols="12" sm="6">
+              <v-btn color="blue darken-1" text @click="cancelDialog()"
+                >Cancel</v-btn
+              >
+            </v-col>
+          </v-row>
+          <v-spacer></v-spacer>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+  </div>
 
     </v-container>
     <!-- QUITAR LA NEGACION DE EL CONTAINER DE ABAJO AL MOMENTO DE PODER TRABAJAR CON CONTRATOS QUE VENGAN DEL LOCALSTORAGE -->
@@ -25,7 +61,7 @@
 
       <p>Subir documento de el proceso (contrato)</p>
       <v-file-input
-        v-model="contract.dataFile"
+        v-model="contractSelected"
         truncate-length="15"
         label="Subir pdf"
         accept =".pdf"
@@ -36,7 +72,8 @@
         <v-btn color="primary" @click="acceptedContract()" v-if="documentsUp">Aceptar contrato</v-btn>
         <v-btn color="primary" @click="rejectedContract()" v-if="documentsUp">Rechazar contrato</v-btn>
     
-        <v-btn color="primary" style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px"  @click="upDocuments()" v-else>Subir documento</v-btn>
+        <v-btn color="primary" style="width: 300px; height: 40px; margin-left: 0px; margin-top: 16px"
+         @click="upDocuments()" v-else>Subir documento</v-btn>
       </v-container>
       
       <v-btn color="primary" @click="negotiateContract()" v-if="negotiateInProcess">Negociar contrato</v-btn>
@@ -173,45 +210,31 @@ export default {
   },
   data: () => ({
     //class="mt-md-6 px-md-6"
-    desabled: false,
+    serviceSelected: [],
+    disabled: true,
+    idSelected: null,
+    contractSelected: null,
+    services: [],
+    onlineUserProvider: [],
     contracts: [],
     contract: {
-        idContract: null,
-        idService: null,
-        idProvider: null,
-        idClient: null,
-
-        dataFile: null,
-        nameFile: null,
-        pathFile: null,
-
-        isTotalAceptedProvider: null,
-        isTotalAceptedClient: null,
-
-        isProviderNotified: null,
-        isClientNotified: null,
-    },
-
-    contractsActivates: [],
-    contractActivate: {
-        idContract: null,
-        idService: null,
-        idProvider: null,
-        idClient: null,
-
-        dataFile: null,
-        nameFile: null,
-        pathFile: null,
-
-        description: null,
-        finDate: null,
-        initDate: null,
-        total: null,
+        idcontract: null,
+        idclient: null,
+        idprovider: null,
+        idservice: null,
+        totalneto: null,
+        documentcontract: null,
+        isaceptedprovider: null,
+        isaceptedclient: null,
+        isprovidernotified: null,
+        isclientnotified: null,
+        state: null,
     },
 
     dialog: false,
     dialog2: false,
     dialog3: false,
+    dialogContact: false,
     dialogIsWantAccepted: false,
     dialogTotalRejected: false,
     dialogIsWantRejected: false,
@@ -222,46 +245,90 @@ export default {
     isInProcessContract: false,
     documentsUp: false,
     negotiateInProcess: false,
+
+    headers: [
+        { text: "id del proovedor", value: "idprovider" },
+        { text: "id del servicio", value: "idservice" },
+        { text: "Descripcion del servicio", value: "description" },
+        { text: "fecha inicial", value: "initdate" },
+        { text: "Fecha final", value: "findate" },
+        { text: "Valor total", value: "total" },
+        { text: "Opciones", value: "actions" },
+      ],
 }),
 methods: {
     loadInfo() {
-        //debugger
-        let contracts = localStorage.getItem("contracts");
-        if (contracts != null) { 
-            this.contracts = JSON.parse(contracts);
-            this.desabled = false; 
-        }else{
-            this.dialog = true;
-            this.desabled = true;
-        }
-    },
-    searchContractInProcess(){
-        if (this.contracts != null) { 
-            this.dialog = true;   
-        }else{
-            try{
-                if(this.contract.idContract != null || this.contract.idContract != undefined){
-                    let idContract = this.contract.idContract;
-                    for(var i = 0; i < this.contracts.lenght; i++){
-                        if(idContract == this.contract.idContract){
-                            this.isInProcessContract = true;
-                        }
-                    }
-                }else{
-                    alert("Llene el campo por favor");
-                }
-            }catch(e){
-                //handleError(e, vnode.context, ("directive " + (dir.name) + " " + hook + " hook"));
-                alert(e);
+      let onlineUserProvider = localStorage.getItem("onlineUserProvider");
+      if (onlineUserProvider != null) {
+        this.onlineUserProvider = JSON.parse(onlineUserProvider);
+      }
+      
+      //let contracts = localStorage.getItem("contracts");
+      const url = "http://localhost:3001/api/v2/contracts/" + this.onlineUserProvider.iduser;
+      let data = {};
+      this.$axios
+        .get(url)
+        .then((res) => {
+          let contracts = res.data.info;
+          this.contracts = contracts;
+          console.log("contractss", this.contracts);
+          this.disabled = true;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+      //let contracts = localStorage.getItem("contracts");
+      let j = 0;
+
+      const url2 = "http://localhost:3001/api/v2/services";
+      let data2 = {};
+      this.$axios
+        .get(url2)
+        .then((res) => {
+          let services = res.data.info;
+          console.log("Regist" + services, data);
+          let servicesInProcces = []; 
+          for(let i = 0; i < services.length; i++){
+            if(services[i].state === "En proceso" && services[i].idprovider == this.onlineUserProvider.iduser){
+              servicesInProcces[j] = services[i];
+              j++;
             }
+          }
+          this.services = servicesInProcces;
+          console.log("services", this.services);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+
+    },
+    selectContractInProcess(){
+      console.log("asdjfasdjfk", this.idSelected);
+      let j = 0;
+
+      let servicesSelectedInProcces = []
+      //servicesSelectedInProcces = this.services.idservice = this.idSelected;
+      for(let i = 0; i < this.services.length; i++){
+        if(this.services[i].idservice == this.idSelected){
+          servicesSelectedInProcces[j] = this.services[i];
+          j++;
         }
+      }
+      j = 0;
+      if(servicesSelectedInProcces[0] != null) {
+        this.disabled = false;
+        this.services = servicesSelectedInProcces;
+        this.serviceSelected = servicesSelectedInProcces;
+        alert("Servicio " + this.idSelected + " seleccionado.");
+      }else{
+        alert("Seleccione un servicio existente.");
+        this.idSelected = "";
+      }
     },
     upDocuments(){
-        if(this.contract.dataFile != null){
-            let dataFile = this.contract.dataFile;
-            this.contract.nameFile = dataFile.name;
-            (dataFile.webkitRelativePath == "") ? this.contract.pathFile = " - isEmpty - " : this.contract.pathFile = dataFile.webkitRelativePath;
-            this.documentsUp = true;
+        if(this.contractSelected != null){
+        //CODIGO PARA ACTUALIZAR EL NOMBRE DEL CONTRATO EN LA TABLA CONTRATOS, ADEMAS DE SUBIR EL DOCUMENTO
         }else{
             alert("Suba el documento pertinenete por favor");
         }

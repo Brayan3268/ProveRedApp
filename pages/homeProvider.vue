@@ -115,7 +115,8 @@ export default {
     this.loadInfo();
     //this.loadUsers();
     console.log(this.userOnline);
-    console.log(this.iniciales())
+    
+    console.log(this.iniciales());
   },
 
   data: () => ({
@@ -175,6 +176,7 @@ export default {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       this.userOnline = JSON.parse(onlineUserProvider);
       this.user = this.userOnline;
+      this.iniciales();
     },
 
     iniciales(){
