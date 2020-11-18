@@ -4,7 +4,7 @@ import datetime
 -->
 
 <template>
-<!-- permite crear un nuevo servicio del proveedor especificando sus diferentes campos o atributos, y activarlo-->
+  <!-- permite crear un nuevo servicio del proveedor especificando sus diferentes campos o atributos, y activarlo-->
   <div>
     <!-- campos requeridos para la creación de un nuevo servicio del proveedor-->
     <v-form ref="formService" v-model="formService">
@@ -133,18 +133,12 @@ export default {
     },
   },
   methods: {
-    //Carga los servicios anteriormente creados en un arreglo 
+    //Carga los servicios anteriormente creados en un arreglo
     loadInfo() {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       if (onlineUserProvider != null) {
         this.onlineUserProvider = JSON.parse(onlineUserProvider);
       }
-
-      //Hay que hacer el get de los servicios, aunque no veo para que es util
-      /*let services = localStorage.getItem("services");
-      if (services != null) {
-        this.services = JSON.parse(services);
-      }*/
     },
     /// Crea un nuevo servicio una vez verificados todas las reglas de los campos del formulario, y lo guarda en el arreglo de servicios
     createService() {
@@ -152,23 +146,18 @@ export default {
         const url = "http://localhost:3001/api/v2/services";
         let data = {};
         this.service.initdate = this.dates[0];
-
-        console.log(this.service.initdate);
         this.service.findate = this.dates[this.dates.length - 1];
-
-        console.log(this.service.findate);
-        this.service.state = "En proceso";
+        this.service.state = "En espera";
         this.service.idprovider = this.onlineUserProvider.iduser;
         data = this.service;
         console.log(data);
-        // let token = localStorage.getItem("token");
-        // this.$axios.setToken(token, "Bearer");
         this.$axios
           .post(url, data)
           .then((res) => {
             console.log(res);
             //alert("Servicio registrado correctamete");
             this.dialogCreateService = true;
+            this.service = {};
           })
           .catch((err) => {
             alert("Servicio no se pudo registrar correctamete");

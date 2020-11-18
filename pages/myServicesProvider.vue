@@ -1,26 +1,26 @@
 <template>
-<!-- Muestra los servicios actuales de un proveedor y permite editar un servicio del proveedor especificando sus diferentes campos o atributos, y activarlo-->
+  <!-- Muestra los servicios actuales de un proveedor y permite editar un servicio del proveedor especificando sus diferentes campos o atributos, y activarlo-->
   <div>
     <v-form ref="formEdit" v-model="formEdit" lazy-validation>
       <h1>Mis servicios activos</h1>
 
       <v-row>
         <v-text-field
-          v-model="servicesOnlineUserProvider.id"
+          v-model="onlineUserProvider.iduser"
           label="Cedula"
           class="mt-md-6 px-md-6"
           disabled
         ></v-text-field>
 
         <v-text-field
-          v-model="servicesOnlineUserProvider.idService"
+          v-model="servicesOnlineUserProvider.idservice"
           label="ID del servicio"
           class="mt-md-6 px-md-6"
           disabled
         ></v-text-field>
 
         <v-text-field
-          v-model="servicesOnlineUserProvider.initDate"
+          v-model="servicesOnlineUserProvider.initdate"
           label="Fecha de incio del evento"
           class="mt-md-6 px-md-6"
           type="date"
@@ -29,7 +29,7 @@
         ></v-text-field>
 
         <v-text-field
-          v-model="servicesOnlineUserProvider.finDate"
+          v-model="servicesOnlineUserProvider.findate"
           label="Fecha final del evento"
           class="mt-md-6 px-md-6"
           type="date"
@@ -79,9 +79,9 @@
         <v-icon small class="mr-2" @click="loadService(item)">
           mdi-pencil
         </v-icon>
-        <v-icon small @click="dialogD = true"> mdi-delete </v-icon>
+        <v-icon small @click="deleteService(item)"> mdi-delete </v-icon>
 
-        <v-dialog v-model="dialogD" persistent>
+        <!-- <v-dialog v-model="dialogD" persistent @click="">
           <v-card>
             <v-card-title class="headline">
               Eliminacion de servicio</v-card-title
@@ -93,7 +93,7 @@
             <v-card-actions>
               <v-spacer></v-spacer>
 
-              <v-btn color="primary" text @click="deleteService(item)">
+              <v-btn color="primary" text @click="Isaccepted = true">
                 Aceptar
               </v-btn>
               <v-btn color="primary" text @click="dialogD = false">
@@ -101,7 +101,7 @@
               </v-btn>
             </v-card-actions>
           </v-card>
-        </v-dialog>
+        </v-dialog> -->
       </template>
     </v-data-table>
 
@@ -137,9 +137,10 @@ export default {
   beforeMount() {
     this.loadPage();
   },
-  //Carga  los datos del servicio requeridos en el dataTable 
+  //Carga  los datos del servicio requeridos en el dataTable
   data() {
     return {
+      Isaccepted: false,
       formEdit: null,
       dialogR: false,
       dialog: false,
@@ -169,9 +170,9 @@ export default {
       services: [],
       service: {
         iduser: null,
-        idService: null,
-        initDate: null,
-        finDate: null,
+        idservice: null,
+        initdate: null,
+        findate: null,
         description: null,
         total: null,
       },
@@ -186,7 +187,7 @@ export default {
     };
   },
   methods: {
-    //Carga y muestra la pagina con los servicios del proveedor 
+    //Carga y muestra la pagina con los servicios del proveedor
     loadPage() {
       let onlineUserProvider = localStorage.getItem("onlineUserProvider");
       this.onlineUserProvider = JSON.parse(onlineUserProvider);
@@ -198,25 +199,23 @@ export default {
         .get(url)
         .then((res) => {
           console.log(res.data.info);
-          this.servicesOnlineUserProviders = res.data.info;
+          let servicesE = [];
+          let j = 0;
+          let services = res.data.info;
+          console.log(services);
+          for (let i = 0; i < services.length; i++) {
+            if (services[i].state === "En espera") {
+              servicesE[j] = services[i];
+              //this.servicesOnlineUserProviders = services[i];
+              j++;
+            }
+          }
+          this.servicesOnlineUserProviders = servicesE;
+          //this.dates(this.servicesOnlineUserProviders);
         })
         .catch((err) => {
           console.error(err);
         });
-
-      // let services = localStorage.getItem("services");
-
-      // if (services != null) {
-      //   this.services = JSON.parse(services);
-      // }
-
-      // for (var i = 0; i < this.services.length; i++) {
-      //   if (this.services[i].id == this.onlineUserProvider.id) {
-      //     this.servicesOnlineUserProviders.push(this.services[i]);
-      //   }
-      // }
-
-      // console.log(this.servicesOnlineUserProviders);
     },
     loadService(service) {
       this.servicesOnlineUserProvider = service;
@@ -226,21 +225,39 @@ export default {
     //permite editar un servicio seleccionado, previamente cargado en los campos de edición
     editService() {
       if (this.$refs.formEdit.validate() && this.formEdit) {
-        let editedService = this.servicesOnlineUserProvider;
-        console.log(editedService);
-        let idEditedService = editedService.idService;
-        console.log(idEditedService);
-        for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
-          if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
-            this.servicesOnlineUserProvider[i] = editedService;
-            break;
-          }
-        }
+        const url =
+          "http://localhost:3001/api/v2/services/" +
+          this.servicesOnlineUserProvider.idservice;
+        let data = {};
+        data.description = this.servicesOnlineUserProvider.description;
+        data.initdate = this.servicesOnlineUserProvider.initdate;
+        data.findate = this.servicesOnlineUserProvider.findate;
+        data.total = this.servicesOnlineUserProvider.total;
+        data.id = this.servicesOnlineUserProvider.idservice;
+        this.$axios
+          .put(url, data)
+          .then((res) => {
+            console.log(res);
+          })
+          .catch((err) => {
+            console.error(err);
+          });
 
-        localStorage.setItem(
-          "services",
-          JSON.stringify(this.servicesOnlineUserProviders)
-        );
+        // let editedService = this.servicesOnlineUserProvider;
+        // console.log(editedService);
+        // let idEditedService = editedService.idService;
+        // console.log(idEditedService);
+        // for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
+        //   if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
+        //     this.servicesOnlineUserProvider[i] = editedService;
+        //     break;
+        //   }
+        // }
+
+        // localStorage.setItem(
+        //   "services",
+        //   JSON.stringify(this.servicesOnlineUserProviders)
+        // );
         this.servicesOnlineUserProvider = {};
         this.editing = false;
         this.dialog = true;
@@ -249,20 +266,25 @@ export default {
       }
     },
     deleteService(service) {
-      if (true) {
-        let services = localStorage.getItem("services");
-        this.services = JSON.parse(services);
+      const url = "http://localhost:3001/api/v2/services/" + service.idservice;
 
-        var posToDelete = this.services.findIndex(
-          (x) => x.idService == service.idService
-        );
-        if (posToDelete != -1) {
-          this.services.splice(posToDelete, 1);
-          localStorage.setItem("services", JSON.stringify(this.services));
-        }
-        console.log(this.services);
-        window.location.reload();
-      }
+      this.$axios
+        .delete(url)
+        .then((res) => {
+          console.log(res);
+          this.loadPage();
+          //this.dialogD = false;
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+    },
+
+    dates(servicesOnlineUserProviders) {
+      //2020-11-16T00:00:00.000Z
+      console.log(this.servicesOnlineUserProvider);
+      let initdate = this.servicesOnlineUserProvider.initdate.split("T");
+      console.log("dates ", initdate);
     },
   },
 };
