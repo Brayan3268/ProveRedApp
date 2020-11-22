@@ -147,6 +147,11 @@ export default {
         let data = {};
         this.service.initdate = this.dates[0];
         this.service.findate = this.dates[this.dates.length - 1];
+<<<<<<< HEAD
+
+        console.log(this.service.findate);
+=======
+>>>>>>> 29d81d290c481f8dd4fba50d586bbd328e6a2a2e
         this.service.state = "En espera";
         this.service.idprovider = this.onlineUserProvider.iduser;
         data = this.service;
