@@ -211,7 +211,7 @@ export default {
             }
           }
           this.servicesOnlineUserProviders = servicesE;
-          //this.dates(this.servicesOnlineUserProviders);
+          this.dates(this.servicesOnlineUserProviders);
         })
         .catch((err) => {
           console.error(err);
@@ -243,21 +243,6 @@ export default {
             console.error(err);
           });
 
-        // let editedService = this.servicesOnlineUserProvider;
-        // console.log(editedService);
-        // let idEditedService = editedService.idService;
-        // console.log(idEditedService);
-        // for (var i = 0; i < this.servicesOnlineUserProvider.length; i++) {
-        //   if (this.servicesOnlineUserProvider[i].idService == idEditedService) {
-        //     this.servicesOnlineUserProvider[i] = editedService;
-        //     break;
-        //   }
-        // }
-
-        // localStorage.setItem(
-        //   "services",
-        //   JSON.stringify(this.servicesOnlineUserProviders)
-        // );
         this.servicesOnlineUserProvider = {};
         this.editing = false;
         this.dialog = true;
@@ -282,9 +267,16 @@ export default {
 
     dates(servicesOnlineUserProviders) {
       //2020-11-16T00:00:00.000Z
-      console.log(this.servicesOnlineUserProvider);
-      let initdate = this.servicesOnlineUserProvider.initdate.split("T");
-      console.log("dates ", initdate);
+      // console.log(servicesOnlineUserProviders);
+      let initdate = [];
+      let findate = [];
+      for (let i = 0; i < servicesOnlineUserProviders.length; i++) {
+        initdate[i] = servicesOnlineUserProviders[i].initdate.split("T");
+        findate[i] = servicesOnlineUserProviders[i].findate.split("T");
+
+        this.servicesOnlineUserProviders[i].initdate = initdate[i][0];
+        this.servicesOnlineUserProviders[i].findate = findate[i][0];
+      }
     },
   },
 };
