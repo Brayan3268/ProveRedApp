@@ -11,7 +11,9 @@
         <v-icon small class="mdi-phone" @click="getService(item)">
           mdi-phone
         </v-icon>
-        <v-icon small @click="addServiceToMyContractsInProcces(item)"> mdi-clipboard-check </v-icon>
+        <v-icon small @click="addServiceToMyContractsInProcces(item)">
+          mdi-clipboard-check
+        </v-icon>
       </template>
     </v-data-table>
     <!--Se muestra el dialogo con las opciones de contacto para con el proveedor-->
@@ -23,14 +25,19 @@
         <v-card-actions>
           <v-spacer></v-spacer>
 
-          <v-row style="width: 300px;">
+          <v-row style="width: 300px">
             <v-col cols="12" sm="6">
               <a
                 href="https://api.whatsapp.com/send?phone=573137364711&text=Bienvenido"
                 target="_blank"
               >
                 <v-icon class="mdi-whatsapp">mdi-whatsapp </v-icon>
-                <v-icon class="mr-2" style="margin-left: 20px;">mdi-email</v-icon>
+                <v-icon
+                  class="mr-2"
+                  style="margin-left: 20px"
+                  @click="sendEmail()"
+                  >mdi-email</v-icon
+                >
               </a>
             </v-col>
           </v-row>
@@ -105,9 +112,9 @@ export default {
         .then((res) => {
           let services = res.data.info;
           console.log("Regist" + services, data);
-          let servicesInProcces = []; 
-          for(let i = 0; i < services.length; i++){
-            if(services[i].state === "En espera"){
+          let servicesInProcces = [];
+          for (let i = 0; i < services.length; i++) {
+            if (services[i].state === "En espera") {
               servicesInProcces[j] = services[i];
               j++;
             }
@@ -158,63 +165,79 @@ export default {
     cancelDialog() {
       this.dialogContact = false;
     },
-    addServiceToMyContractsInProcces(service){
+    addServiceToMyContractsInProcces(service) {
       //debugger
       console.log("serviceeeeeee", service);
       const url = "http://localhost:3001/api/v2/contracts";
-        let data = {};
-        data.idclient = this.onlineUserClient.iduser;
-        data.idprovider = service.idprovider;
-        data.idservice = service.idservice;
-        data.totalneto = service.total;
-        data.documentcontract = "nn";
-        data.isaceptedprovider = this.isFalse;
-        data.isaceptedclient = this.isFalse;
-        data.isprovidernotified = this.isFalse;
-        data.isclientnotified = this.isFalse;
-        data.state = "En proceso";
-        this.$axios
-          .post(url, data)
-          .then((res) => {
-            alert("Contrado agregado a contratos en proceso");
-              //sessionStorage.setItem("idProvider", this.user.id);
-              //this.$router.push("/formProvider");
-          })
-          .catch((err) => {
-            //alert(err.message);
-            alert("Error en la creacion del contrato");
-          });
+      let data = {};
+      data.idclient = this.onlineUserClient.iduser;
+      data.idprovider = service.idprovider;
+      data.idservice = service.idservice;
+      data.totalneto = service.total;
+      data.documentcontract = "nn";
+      data.isaceptedprovider = this.isFalse;
+      data.isaceptedclient = this.isFalse;
+      data.isprovidernotified = this.isFalse;
+      data.isclientnotified = this.isFalse;
+      data.state = "En proceso";
+      this.$axios
+        .post(url, data)
+        .then((res) => {
+          alert("Contrado agregado a contratos en proceso");
+          //sessionStorage.setItem("idProvider", this.user.id);
+          //this.$router.push("/formProvider");
+        })
+        .catch((err) => {
+          //alert(err.message);
+          alert("Error en la creacion del contrato");
+        });
 
-        //Se cambia el estado del servicio para que este ya no se muestre en "En espera"
+      //Se cambia el estado del servicio para que este ya no se muestre en "En espera"
 
-        const urlService =
-          "http://localhost:3001/api/v2/services/" + service.idservice;
-        let dataService = {};
-        //dataService.idservice = service.idservice;
-        dataService.idprovider = service.idprovider;
-        dataService.description = service.description;
-        dataService.initdate = service.initdate;
-        dataService.findate = service.findate;
-        dataService.state = "En proceso";
-        dataService.total = service.total;
-        console.log("iididididd", service.idservice);
-        console.log("hgfgh", dataService);
-        this.$axios
-          .put(urlService, dataService)
-          .then((res) => {
-            console.log(res);
-            //loadPage();
-            this.getService(service);
-          })
-          .catch((err) => {
-            console.error(err);
-            alert("Se edito correctamente");
-          });
-          this.updateScreen();
-        //this.getUser();
+      const urlService =
+        "http://localhost:3001/api/v2/services/" + service.idservice;
+      let dataService = {};
+      //dataService.idservice = service.idservice;
+      dataService.idprovider = service.idprovider;
+      dataService.description = service.description;
+      dataService.initdate = service.initdate;
+      dataService.findate = service.findate;
+      dataService.state = "En proceso";
+      dataService.total = service.total;
+      console.log("iididididd", service.idservice);
+      console.log("hgfgh", dataService);
+      this.$axios
+        .put(urlService, dataService)
+        .then((res) => {
+          console.log(res);
+          //loadPage();
+          //this.getService(service);
+          alert("Se edito correctamente");
+        })
+        .catch((err) => {
+          console.error(err);
+        });
+      this.updateScreen();
+      //this.getUser();
     },
-    updateScreen(){
+    updateScreen() {
       window.location.reload();
+    },
+
+    sendEmail() {
+      const url = "http://localhost:3001/api/v2/mail";
+      let data = {};
+      data.fullname = this.onlineUserClient.fullname;
+      data.email = "mateomon02@hotmail.com";
+      data.ClientEmail = this.onlineUserClient.email;
+      this.$axios
+        .get(url, data)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     },
   },
 };

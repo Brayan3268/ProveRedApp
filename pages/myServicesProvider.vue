@@ -211,7 +211,6 @@ export default {
             }
           }
           this.servicesOnlineUserProviders = servicesE;
-          this.dates(this.servicesOnlineUserProviders);
         })
         .catch((err) => {
           console.error(err);
